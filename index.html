@@ -52,6 +52,30 @@
         }
         .sidebar.expanded { width: var(--sidebar-width); padding: 30px 20px; }
 
+        /* ─── SIDEBAR NAV SCROLL ───────────────────── */
+        .nav-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin: 0 -4px;
+            padding: 0 4px;
+            /* hide scrollbar when collapsed, show when expanded and needed */
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+        .sidebar.expanded .nav-scroll {
+            scrollbar-color: var(--border) transparent;
+        }
+        .nav-scroll::-webkit-scrollbar { width: 4px; }
+        .nav-scroll::-webkit-scrollbar-track { background: transparent; }
+        .nav-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .sidebar.expanded .nav-scroll::-webkit-scrollbar-thumb { background: var(--border); }
+        .sidebar.expanded .nav-scroll::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+
         /* FIX 1: Logo always visible — icon shows collapsed, full text shows expanded */
         .logo {
             font-weight: 800;
@@ -289,43 +313,45 @@
         <span class="logo-text">VYNIX<span>ADMIN</span></span>
     </div>
 
-    <div class="nav-section">
-        <div class="nav-label">Main</div>
-        <div class="nav-item active" onclick="showTab('dashboard',this)">
-            <i data-lucide="layout-dashboard" class="nav-icon"></i>
-            <span class="nav-text">Dashboard</span>
+    <div class="nav-scroll">
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <div class="nav-item active" onclick="showTab('dashboard',this)">
+                <i data-lucide="layout-dashboard" class="nav-icon"></i>
+                <span class="nav-text">Dashboard</span>
+            </div>
+            <div class="nav-item" onclick="showTab('vendors',this)">
+                <i data-lucide="store" class="nav-icon"></i>
+                <span class="nav-text">Vendors</span>
+                <span class="notification-badge" id="vendorBadge"></span>
+            </div>
+            <div class="nav-item" onclick="showTab('drivers',this)">
+                <i data-lucide="bike" class="nav-icon"></i>
+                <span class="nav-text">Drivers</span>
+                <span class="notification-badge" id="driverBadge"></span>
+            </div>
+            <div class="nav-item" onclick="showTab('analytics',this)">
+                <i data-lucide="bar-chart-3" class="nav-icon"></i>
+                <span class="nav-text">Analytics</span>
+            </div>
         </div>
-        <div class="nav-item" onclick="showTab('vendors',this)">
-            <i data-lucide="store" class="nav-icon"></i>
-            <span class="nav-text">Vendors</span>
-            <span class="notification-badge" id="vendorBadge"></span>
-        </div>
-        <div class="nav-item" onclick="showTab('drivers',this)">
-            <i data-lucide="bike" class="nav-icon"></i>
-            <span class="nav-text">Drivers</span>
-            <span class="notification-badge" id="driverBadge"></span>
-        </div>
-        <div class="nav-item" onclick="showTab('analytics',this)">
-            <i data-lucide="bar-chart-3" class="nav-icon"></i>
-            <span class="nav-text">Analytics</span>
-        </div>
-    </div>
 
-    <div class="nav-section">
-        <div class="nav-label">System</div>
-        <div class="nav-item" onclick="showTab('history',this)">
-            <i data-lucide="history" class="nav-icon"></i>
-            <span class="nav-text">History</span>
+        <div class="nav-section">
+            <div class="nav-label">System</div>
+            <div class="nav-item" onclick="showTab('history',this)">
+                <i data-lucide="history" class="nav-icon"></i>
+                <span class="nav-text">History</span>
+            </div>
+            <div class="nav-item" onclick="showTab('notifications',this)">
+                <i data-lucide="bell" class="nav-icon"></i>
+                <span class="nav-text">Notifications</span>
+            </div>
+            <div class="nav-item" onclick="showTab('settings',this)">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span class="nav-text">Settings</span>
+            </div>
         </div>
-        <div class="nav-item" onclick="showTab('notifications',this)">
-            <i data-lucide="bell" class="nav-icon"></i>
-            <span class="nav-text">Notifications</span>
-        </div>
-        <div class="nav-item" onclick="showTab('settings',this)">
-            <i data-lucide="settings" class="nav-icon"></i>
-            <span class="nav-text">Settings</span>
-        </div>
-    </div>
+    </div><!-- /nav-scroll -->
 
     <div class="user-profile" onclick="openProfileModal()">
         <div class="user-avatar" id="sidebarAvatar">AD</div>
@@ -700,19 +726,142 @@
 
 <!-- Add Vendor -->
 <div class="modal-overlay" id="addVendorModal">
-    <div class="modal-content">
-        <h3><i data-lucide="store" style="width:22px;height:22px;color:var(--accent);"></i> Add New Vendor</h3>
-        <div class="form-group"><label>Business Name</label><input type="text" id="av-name" placeholder="e.g. Pizza Palace"></div>
-        <div class="form-group"><label>Cuisine Type</label><input type="text" id="av-cuisine" placeholder="e.g. Italian, Fast Food"></div>
-        <div class="form-group"><label>Business Logo (optional)</label><input type="file" id="av-image" accept="image/*"><small style="color:var(--dim);display:block;margin-top:5px;">Uploaded to Cloudinary</small></div>
-        <div class="form-group"><label>Initial Status</label>
-            <select id="av-status">
-                <option value="pending">Pending Review</option>
-                <option value="active">Active (Auto-Approve)</option>
-            </select>
+    <div class="modal-content" style="width:620px;">
+        <h3><i data-lucide="store" style="width:22px;height:22px;color:var(--accent);"></i> Register New Vendor</h3>
+
+        <!-- Section: Business Identity -->
+        <div style="background:#f8f9ff;border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid #e8ecff;">
+            <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i data-lucide="briefcase" style="width:13px;height:13px;"></i> Business Identity</p>
+            <div class="form-row">
+                <div class="form-group"><label>Business Name <span style="color:var(--danger)">*</span></label><input type="text" id="av-name" placeholder="e.g. Pizza Palace"></div>
+                <div class="form-group"><label>Trading Name / Alias</label><input type="text" id="av-tradename" placeholder="e.g. PizzaPalace SA"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Cuisine / Category <span style="color:var(--danger)">*</span></label>
+                    <select id="av-cuisine-cat">
+                        <option value="">Select category</option>
+                        <option value="Fast Food">Fast Food</option>
+                        <option value="Pizza">Pizza</option>
+                        <option value="Burgers">Burgers</option>
+                        <option value="Chicken">Chicken</option>
+                        <option value="Sushi">Sushi</option>
+                        <option value="Indian">Indian</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="Italian">Italian</option>
+                        <option value="African">African</option>
+                        <option value="Healthy / Salads">Healthy / Salads</option>
+                        <option value="Desserts / Bakery">Desserts / Bakery</option>
+                        <option value="Drinks / Beverages">Drinks / Beverages</option>
+                        <option value="Halaal">Halaal</option>
+                        <option value="Vegan / Vegetarian">Vegan / Vegetarian</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Cuisine Description</label><input type="text" id="av-cuisine" placeholder="e.g. Wood-fired Neapolitan pizza"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Business Registration No.</label><input type="text" id="av-regno" placeholder="e.g. 2021/123456/07"></div>
+                <div class="form-group"><label>VAT Number (if applicable)</label><input type="text" id="av-vat" placeholder="e.g. 4123456789"></div>
+            </div>
         </div>
+
+        <!-- Section: Contact Details -->
+        <div style="background:#f8fff9;border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid #d4f5e0;">
+            <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--success);margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i data-lucide="phone" style="width:13px;height:13px;"></i> Contact Details</p>
+            <div class="form-row">
+                <div class="form-group"><label>Owner / Contact Person <span style="color:var(--danger)">*</span></label><input type="text" id="av-owner" placeholder="Full name of owner"></div>
+                <div class="form-group"><label>Phone Number <span style="color:var(--danger)">*</span></label><input type="tel" id="av-phone" placeholder="+27 71 000 0000"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Email Address <span style="color:var(--danger)">*</span></label><input type="email" id="av-email" placeholder="vendor@business.co.za"></div>
+                <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="av-whatsapp" placeholder="+27 71 000 0000"></div>
+            </div>
+            <div class="form-group"><label>Website / Social Media Link</label><input type="url" id="av-website" placeholder="https://www.business.co.za or @handle"></div>
+        </div>
+
+        <!-- Section: Location -->
+        <div style="background:#fff8f0;border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid #fde8cc;">
+            <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--warning);margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i data-lucide="map-pin" style="width:13px;height:13px;"></i> Location</p>
+            <div class="form-group"><label>Street Address <span style="color:var(--danger)">*</span></label><input type="text" id="av-street" placeholder="e.g. 12 Main Street"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Suburb</label><input type="text" id="av-suburb" placeholder="e.g. Sandton"></div>
+                <div class="form-group"><label>City / Town <span style="color:var(--danger)">*</span></label><input type="text" id="av-city" placeholder="e.g. Johannesburg"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Province</label>
+                    <select id="av-province">
+                        <option value="">Select province</option>
+                        <option value="Gauteng">Gauteng</option>
+                        <option value="Western Cape">Western Cape</option>
+                        <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                        <option value="Eastern Cape">Eastern Cape</option>
+                        <option value="Limpopo">Limpopo</option>
+                        <option value="Mpumalanga">Mpumalanga</option>
+                        <option value="North West">North West</option>
+                        <option value="Free State">Free State</option>
+                        <option value="Northern Cape">Northern Cape</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Postal Code</label><input type="text" id="av-postal" placeholder="e.g. 2196" maxlength="4"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>GPS Latitude</label><input type="text" id="av-lat" placeholder="e.g. -26.2041"></div>
+                <div class="form-group"><label>GPS Longitude</label><input type="text" id="av-lng" placeholder="e.g. 28.0473"></div>
+            </div>
+            <div class="form-group"><label>Delivery Radius (km)</label>
+                <select id="av-radius">
+                    <option value="3">3 km</option>
+                    <option value="5" selected>5 km</option>
+                    <option value="10">10 km</option>
+                    <option value="15">15 km</option>
+                    <option value="20">20 km</option>
+                    <option value="30">30 km</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Section: Operations -->
+        <div style="background:#fdf8ff;border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid #ecdeff;">
+            <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--purple);margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i data-lucide="clock" style="width:13px;height:13px;"></i> Operations</p>
+            <div class="form-row">
+                <div class="form-group"><label>Opening Time</label><input type="time" id="av-open" value="08:00"></div>
+                <div class="form-group"><label>Closing Time</label><input type="time" id="av-close" value="22:00"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Min. Order Value (R)</label><input type="number" id="av-minorder" placeholder="e.g. 50" min="0"></div>
+                <div class="form-group"><label>Avg. Prep Time (mins)</label><input type="number" id="av-preptime" placeholder="e.g. 20" min="5"></div>
+            </div>
+            <div class="form-group"><label>Operating Days</label>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;" id="av-days">
+                    <label style="display:flex;align-items:center;gap:4px;font-size:.83rem;font-weight:500;background:white;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;transition:var(--transition);" id="day-mon"><input type="checkbox" value="Mon" style="width:auto;padding:0;border:none;background:none;" onchange="toggleDayLabel(this)"> Mon</label>
+                    <label style="display:flex;align-items:center;gap:4px;font-size:.83rem;font-weight:500;background:white;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;" id="day-tue"><input type="checkbox" value="Tue" style="width:auto;padding:0;border:none;background:none;" onchange="toggleDayLabel(this)"> Tue</label>
+                    <label style="display:flex;align-items:center;gap:4px;font-size:.83rem;font-weight:500;background:white;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;" id="day-wed"><input type="checkbox" value="Wed" style="width:auto;padding:0;border:none;background:none;" onchange="toggleDayLabel(this)"> Wed</label>
+                    <label style="display:flex;align-items:center;gap:4px;font-size:.83rem;font-weight:500;background:white;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;" id="day-thu"><input type="checkbox" value="Thu" style="width:auto;padding:0;border:none;background:none;" onchange="toggleDayLabel(this)"> Thu</label>
+                    <label style="display:flex;align-items:center;gap:4px;font-size:.83rem;font-weight:500;background:white;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;" id="day-fri"><input type="checkbox" value="Fri" style="width:auto;padding:0;border:none;background:none;" onchange="toggleDayLabel(this)"> Fri</label>
+                    <label style="display:flex;align-items:center;gap:4px;font-size:.83rem;font-weight:500;background:white;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;" id="day-sat"><input type="checkbox" value="Sat" style="width:auto;padding:0;border:none;background:none;" onchange="toggleDayLabel(this)"> Sat</label>
+                    <label style="display:flex;align-items:center;gap:4px;font-size:.83rem;font-weight:500;background:white;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;" id="day-sun"><input type="checkbox" value="Sun" style="width:auto;padding:0;border:none;background:none;" onchange="toggleDayLabel(this)"> Sun</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Media & Status -->
+        <div style="background:#fafafa;border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid var(--border);">
+            <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--dim);margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i data-lucide="image" style="width:13px;height:13px;"></i> Media &amp; Status</p>
+            <div class="form-row">
+                <div class="form-group"><label>Business Logo</label><input type="file" id="av-image" accept="image/*"><small style="color:var(--dim);display:block;margin-top:4px;">Uploaded to Cloudinary</small></div>
+                <div class="form-group"><label>Banner / Cover Image</label><input type="file" id="av-banner" accept="image/*"><small style="color:var(--dim);display:block;margin-top:4px;">Optional storefront banner</small></div>
+            </div>
+            <div class="form-group"><label>Admin Notes</label><textarea id="av-notes" placeholder="Internal notes about this vendor…" style="min-height:60px;"></textarea></div>
+            <div class="form-group"><label>Initial Status</label>
+                <select id="av-status">
+                    <option value="pending">Pending Review</option>
+                    <option value="active">Active (Auto-Approve)</option>
+                </select>
+            </div>
+        </div>
+
         <div class="modal-btn-row">
-            <button class="btn btn-approve" style="flex:2;justify-content:center;" onclick="saveNewVendor()"><i data-lucide="check" style="width:16px;height:16px;"></i> Create Vendor</button>
+            <button class="btn btn-approve" style="flex:2;justify-content:center;" onclick="saveNewVendor()"><i data-lucide="check" style="width:16px;height:16px;"></i> Register Vendor</button>
             <button class="btn btn-edit" style="flex:1;justify-content:center;" onclick="hideModal('addVendorModal')">Cancel</button>
         </div>
     </div>
@@ -1041,21 +1190,102 @@ function renderVendorTable() {
 
 function openAddVendorModal() { showModal('addVendorModal'); }
 async function saveNewVendor() {
-    const name = document.getElementById('av-name').value.trim();
-    const cuisine = document.getElementById('av-cuisine').value.trim();
-    const status = document.getElementById('av-status').value;
-    const file = document.getElementById('av-image').files[0];
-    if (!name||!cuisine) { showToast('Fill in all required fields','error'); return; }
-    let imageURL = '';
-    if (file) { showToast('Uploading image…','info'); try { imageURL = await uploadToCloudinary(file); } catch { showToast('Image upload failed','error'); return; } }
-    const data = { name, cuisine, status, createdAt: Date.now(), imageURL };
-    if (status==='active') data.vendorID = genID('VYN-');
+    const name    = document.getElementById('av-name').value.trim();
+    const cuisine = (document.getElementById('av-cuisine').value.trim() || document.getElementById('av-cuisine-cat').value).trim();
+    const status  = document.getElementById('av-status').value;
+    const file    = document.getElementById('av-image').files[0];
+    const banner  = document.getElementById('av-banner').files[0];
+
+    if (!name) { showToast('Business name is required','error'); return; }
+    if (!document.getElementById('av-cuisine-cat').value && !document.getElementById('av-cuisine').value.trim()) {
+        showToast('Please select or enter a cuisine / category','error'); return;
+    }
+    if (!document.getElementById('av-owner').value.trim()) { showToast('Owner / contact name is required','error'); return; }
+    if (!document.getElementById('av-phone').value.trim()) { showToast('Phone number is required','error'); return; }
+    if (!document.getElementById('av-email').value.trim()) { showToast('Email address is required','error'); return; }
+    if (!document.getElementById('av-street').value.trim()) { showToast('Street address is required','error'); return; }
+    if (!document.getElementById('av-city').value.trim()) { showToast('City is required','error'); return; }
+
+    let imageURL = '', bannerURL = '';
+    if (file) { showToast('Uploading logo…','info'); try { imageURL = await uploadToCloudinary(file); } catch { showToast('Logo upload failed','error'); return; } }
+    if (banner) { showToast('Uploading banner…','info'); try { bannerURL = await uploadToCloudinary(banner); } catch { showToast('Banner upload failed','error'); return; } }
+
+    // Collect operating days
+    const days = Array.from(document.querySelectorAll('#av-days input[type=checkbox]:checked')).map(c => c.value);
+
+    const data = {
+        name,
+        tradingName:  document.getElementById('av-tradename').value.trim(),
+        cuisine,
+        cuisineCategory: document.getElementById('av-cuisine-cat').value,
+        businessRegNo: document.getElementById('av-regno').value.trim(),
+        vatNumber:    document.getElementById('av-vat').value.trim(),
+        ownerName:    document.getElementById('av-owner').value.trim(),
+        phone:        document.getElementById('av-phone').value.trim(),
+        email:        document.getElementById('av-email').value.trim(),
+        whatsapp:     document.getElementById('av-whatsapp').value.trim(),
+        website:      document.getElementById('av-website').value.trim(),
+        address: {
+            street:   document.getElementById('av-street').value.trim(),
+            suburb:   document.getElementById('av-suburb').value.trim(),
+            city:     document.getElementById('av-city').value.trim(),
+            province: document.getElementById('av-province').value,
+            postalCode: document.getElementById('av-postal').value.trim(),
+            lat:      document.getElementById('av-lat').value.trim(),
+            lng:      document.getElementById('av-lng').value.trim(),
+        },
+        deliveryRadius: document.getElementById('av-radius').value,
+        openingTime:  document.getElementById('av-open').value,
+        closingTime:  document.getElementById('av-close').value,
+        minOrderValue: document.getElementById('av-minorder').value,
+        avgPrepTime:  document.getElementById('av-preptime').value,
+        operatingDays: days,
+        adminNotes:   document.getElementById('av-notes').value.trim(),
+        status,
+        createdAt:    Date.now(),
+        imageURL,
+        bannerURL,
+    };
+    if (status === 'active') data.vendorID = genID('VYN-');
+
     db.ref('vendors').push(data).then(() => {
-        showToast(`Vendor "${name}" created!`,'success');
-        logHistory(`Created vendor: ${name}`, 'vendor');
+        showToast(`Vendor "${name}" registered!`, 'success');
+        logHistory(`Registered vendor: ${name} (${document.getElementById('av-city').value.trim()})`, 'vendor');
         hideModal('addVendorModal');
-        document.getElementById('av-name').value=''; document.getElementById('av-cuisine').value=''; document.getElementById('av-image').value='';
-    }).catch(() => showToast('Error creating vendor','error'));
+        // clear all fields
+        ['av-name','av-tradename','av-cuisine','av-regno','av-vat','av-owner','av-phone',
+         'av-email','av-whatsapp','av-website','av-street','av-suburb','av-city','av-postal',
+         'av-lat','av-lng','av-minorder','av-preptime','av-notes'].forEach(id => {
+            const el = document.getElementById(id); if (el) el.value = '';
+        });
+        document.getElementById('av-cuisine-cat').selectedIndex = 0;
+        document.getElementById('av-province').selectedIndex = 0;
+        document.getElementById('av-radius').value = '5';
+        document.getElementById('av-open').value = '08:00';
+        document.getElementById('av-close').value = '22:00';
+        document.getElementById('av-image').value = '';
+        document.getElementById('av-banner').value = '';
+        document.querySelectorAll('#av-days input[type=checkbox]').forEach(c => {
+            c.checked = false;
+            c.closest('label').style.background = 'white';
+            c.closest('label').style.borderColor = 'var(--border)';
+            c.closest('label').style.color = '';
+        });
+    }).catch(() => showToast('Error registering vendor','error'));
+}
+
+// Toggle day label highlight when checked
+function toggleDayLabel(checkbox) {
+    const label = checkbox.closest('label');
+    if (checkbox.checked) {
+        label.style.background = 'var(--accent)';
+        label.style.borderColor = 'var(--accent)';
+        label.style.color = 'white';
+    } else {
+        label.style.background = 'white';
+        label.style.borderColor = 'var(--border)';
+        label.style.color = '';
+    }
 }
 function openEditVendorModal(key,name,cuisine,imageURL) {
     document.getElementById('ev-key').value=key;
