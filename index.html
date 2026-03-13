@@ -141,7 +141,7 @@
         .header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--text), var(--dim)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* ─── BUTTONS ───────────────────────────────── */
-        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); box-shadow: 0 4px 12px rgba(0,122,255,0.3); font-family: inherit; font-size: 0.9rem; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 999px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); box-shadow: 0 4px 12px rgba(0,122,255,0.3); font-family: inherit; font-size: 0.9rem; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,122,255,0.4); }
         .btn-primary:active { transform: translateY(0); }
 
@@ -179,7 +179,7 @@
 
         /* ─── BTN ───────────────────────────────────── */
         .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
-        .btn { padding: 8px 14px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; transition: var(--transition); font-size: 0.83rem; display: flex; align-items: center; gap: 5px; font-family: inherit; white-space: nowrap; }
+        .btn { padding: 8px 14px; border-radius: 999px; border: none; cursor: pointer; font-weight: 600; transition: var(--transition); font-size: 0.83rem; display: flex; align-items: center; gap: 5px; font-family: inherit; white-space: nowrap; }
         .btn-approve  { background: var(--success); color: white; box-shadow: 0 2px 8px rgba(52,199,89,.3); }
         .btn-approve:hover  { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(52,199,89,.4); }
         .btn-edit     { background: #f2f2f7; color: var(--text); }
@@ -193,7 +193,7 @@
 
         /* ─── TABS (sub-tabs) ───────────────────────── */
         .sub-tabs { display: flex; gap: 6px; margin-bottom: 24px; background: white; border-radius: 14px; padding: 6px; border: 1px solid var(--border); width: fit-content; }
-        .sub-tab { padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: var(--transition); color: var(--dim); }
+        .sub-tab { padding: 10px 20px; border-radius: 999px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: var(--transition); color: var(--dim); }
         .sub-tab.active { background: var(--text); color: white; }
         .sub-tab:hover:not(.active) { background: #f0f0f5; color: var(--text); }
 
@@ -297,11 +297,84 @@
         .info-chip { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; font-size: .82rem; font-weight: 600; display: flex; align-items: center; gap: 6px; color: var(--dim); }
         .info-chip strong { color: var(--text); }
 
+        /* ─── SHIMMER LOADER ────────────────────────── */
+        #shimmerOverlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg);
+            display: flex; flex-direction: column;
+            pointer-events: all;
+            transition: opacity .55s ease;
+        }
+        #shimmerOverlay.fade-out { opacity: 0; pointer-events: none; }
+        .shim-sidebar {
+            position: absolute; left: 0; top: 0; width: var(--sidebar-collapsed);
+            height: 100%; background: white; border-right: 1px solid var(--border);
+            padding: 24px 12px; display: flex; flex-direction: column; gap: 18px;
+        }
+        .shim-main {
+            margin-left: var(--sidebar-collapsed); flex: 1;
+            padding: 40px; display: flex; flex-direction: column; gap: 28px;
+        }
+        .shim-block {
+            border-radius: 20px; background: linear-gradient(90deg, #e8eaed 25%, #f4f5f7 50%, #e8eaed 75%);
+            background-size: 400% 100%;
+            animation: shimmerSlide 1.5s ease-in-out infinite;
+        }
+        @keyframes shimmerSlide {
+            0%   { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+        .shim-header   { height: 44px; width: 260px; border-radius: 999px; }
+        .shim-stats    { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+        .shim-stat     { height: 110px; border-radius: 20px; }
+        .shim-row      { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .shim-card-tall{ height: 220px; border-radius: 20px; }
+        .shim-card-wide{ height: 160px; border-radius: 20px; }
+        .shim-table    { height: 320px; border-radius: 20px; }
+        .shim-logo     { width: 42px; height: 42px; border-radius: 14px; }
+        .shim-nav      { height: 36px; border-radius: 999px; width: 42px; }
+
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.1);} }
         @keyframes spin  { from{transform:rotate(0deg);}to{transform:rotate(360deg);} }
     </style>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════
+     SHIMMER LOADER OVERLAY
+════════════════════════════════════════ -->
+<div id="shimmerOverlay">
+    <!-- Fake sidebar -->
+    <div class="shim-sidebar">
+        <div class="shim-block shim-logo"></div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
+            <div class="shim-block shim-nav"></div>
+            <div class="shim-block shim-nav"></div>
+            <div class="shim-block shim-nav"></div>
+            <div class="shim-block shim-nav"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:24px;">
+            <div class="shim-block shim-nav"></div>
+            <div class="shim-block shim-nav"></div>
+            <div class="shim-block shim-nav"></div>
+        </div>
+    </div>
+    <!-- Fake main panel -->
+    <div class="shim-main">
+        <div class="shim-block shim-header"></div>
+        <div class="shim-stats">
+            <div class="shim-block shim-stat"></div>
+            <div class="shim-block shim-stat"></div>
+            <div class="shim-block shim-stat"></div>
+            <div class="shim-block shim-stat"></div>
+        </div>
+        <div class="shim-row">
+            <div class="shim-block shim-card-tall"></div>
+            <div class="shim-block shim-card-wide"></div>
+        </div>
+        <div class="shim-block shim-table"></div>
+    </div>
+</div>
 
 <!-- ═══════════════════════════════════════
      SIDEBAR
@@ -2456,6 +2529,18 @@ function showToast(msg, type='success') {
     clearTimeout(t._timer);
     t._timer=setTimeout(()=>t.classList.remove('show'),3400);
 }
+
+// ════════════════════════════════════════
+// SHIMMER LOADER — dismiss after 8–10 s
+// ════════════════════════════════════════
+(function() {
+    const delay = 8000 + Math.random() * 2000; // 8000–10000 ms
+    const overlay = document.getElementById('shimmerOverlay');
+    setTimeout(() => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => overlay.remove(), 600);
+    }, delay);
+})();
 
 // ════════════════════════════════════════
 // BOOT
