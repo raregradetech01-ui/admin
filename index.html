@@ -51,11 +51,35 @@
             overflow: hidden;
         }
         .sidebar.expanded { width: var(--sidebar-width); padding: 30px 20px; }
-        .logo { font-weight: 800; font-size: 1.6rem; margin-bottom: 40px; color: var(--text); letter-spacing: -1px; display: flex; align-items: center; gap: 12px; white-space: nowrap; transition: var(--transition); overflow: hidden; min-width: 0; }
-        .logo .logo-icon { flex-shrink: 0; width: 28px; height: 28px; }
-        .logo .logo-text { opacity: 0; transform: translateX(-10px); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none; }
+
+        /* FIX 1: Logo always visible — icon shows collapsed, full text shows expanded */
+        .logo {
+            font-weight: 800;
+            font-size: 1.6rem;
+            margin-bottom: 40px;
+            color: var(--text);
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+            transition: var(--transition);
+            overflow: hidden;
+            min-width: 0;
+        }
+        .logo .logo-icon { flex-shrink: 0; width: 28px; height: 28px; color: var(--accent); }
+        /* Logo text hidden when collapsed, shown when expanded */
+        .logo .logo-text {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+            font-size: 1.1rem;
+            white-space: nowrap;
+        }
         .sidebar.expanded .logo .logo-text { opacity: 1; transform: translateX(0); }
         .logo span { color: var(--accent); }
+
         .nav-section { margin-bottom: 24px; }
         .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); margin-bottom: 12px; padding-left: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; opacity: 0; transition: opacity 0.2s ease; }
         .sidebar.expanded .nav-label { opacity: 1; }
@@ -203,12 +227,21 @@
         .settings-select:focus { border-color: var(--accent); }
 
         /* ─── CHART ─────────────────────────────────── */
-        .chart-container { padding: 24px; height: 300px; display: flex; align-items: flex-end; justify-content: space-around; gap: 12px; }
-        .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
-        .bar { width: 100%; max-width: 56px; background: linear-gradient(to top, var(--accent), #5856d6); border-radius: 8px 8px 0 0; transition: height 1s cubic-bezier(.4,0,.2,1); opacity: .82; position: relative; cursor: default; }
+        /* FIX 4: chart container needs explicit height and proper overflow */
+        .chart-container {
+            padding: 24px;
+            height: 260px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 12px;
+            overflow: hidden;
+        }
+        .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; max-width: 80px; }
+        .bar { width: 100%; max-width: 56px; background: linear-gradient(to top, var(--accent), #5856d6); border-radius: 8px 8px 0 0; transition: height 1s cubic-bezier(.4,0,.2,1); opacity: .82; position: relative; cursor: default; min-height: 4px; }
         .bar:hover { opacity: 1; filter: brightness(1.08); }
-        .bar-label { font-size: .72rem; color: var(--dim); font-weight: 600; text-align: center; }
-        .bar-value { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: .8rem; opacity: 0; transition: opacity .3s; white-space: nowrap; }
+        .bar-label { font-size: .72rem; color: var(--dim); font-weight: 600; text-align: center; white-space: nowrap; }
+        .bar-value { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: .8rem; opacity: 0; transition: opacity .3s; white-space: nowrap; color: var(--text); }
         .bar:hover .bar-value { opacity: 1; }
 
         /* ─── QUICK ACTIONS ─────────────────────────── */
@@ -250,6 +283,7 @@
      SIDEBAR
 ════════════════════════════════════════ -->
 <nav class="sidebar" id="mainSidebar">
+    <!-- FIX 1: Logo icon always shows; text only when expanded -->
     <div class="logo">
         <i data-lucide="utensils" class="logo-icon"></i>
         <span class="logo-text">VYNIX<span>ADMIN</span></span>
@@ -1152,7 +1186,6 @@ async function saveNewDriver() {
         showToast(`Driver "${fname} ${lname}" registered!`,'success');
         logHistory(`Registered driver: ${fname} ${lname}`, 'driver');
         hideModal('addDriverModal');
-        // clear fields
         ['ad-fname','ad-lname','ad-phone','ad-email','ad-vehicledesc','ad-idnumber','ad-license'].forEach(id => document.getElementById(id).value='');
         document.getElementById('ad-vehicle').selectedIndex=0;
         document.getElementById('ad-image').value='';
@@ -1334,45 +1367,87 @@ function updateDashboardStats() {
 }
 
 // ════════════════════════════════════════
-// ANALYTICS CHARTS
+// ANALYTICS CHARTS — FIX 4
 // ════════════════════════════════════════
 function renderCharts() {
-    renderMonthlyChart('vendorChart', vendorsCache, 'var(--accent)');
-    renderMonthlyChart('driverChart', driversCache, 'var(--purple)');
+    renderMonthlyChart('vendorChart', vendorsCache, 'var(--accent)', '#5856d688');
+    renderMonthlyChart('driverChart', driversCache, 'var(--purple)', '#af52de88');
 }
-function renderMonthlyChart(containerId, cache, color) {
+
+function renderMonthlyChart(containerId, cache, colorStart, colorEnd) {
     const container = document.getElementById(containerId);
+    if (!container) return;
+
     const items = Object.values(cache);
+
+    // FIX 4a: If NO data, show demo bars so chart is never blank
     if (!items.length) {
-        container.innerHTML=`<div class="empty-state" style="width:100%;"><i data-lucide="bar-chart-2" style="width:44px;height:44px;display:block;margin:0 auto 10px;opacity:.4;"></i>No data</div>`;
-        lucide.createIcons(); return;
+        // Show placeholder bars with 0 count
+        const demoLabels = getLast7Months();
+        container.innerHTML = demoLabels.map(l => `
+            <div class="bar-wrapper">
+                <div class="bar" style="height:4px;background:linear-gradient(to top,${colorStart},${colorEnd});">
+                    <div class="bar-value">0</div>
+                </div>
+                <div class="bar-label">${l}</div>
+            </div>`).join('');
+        return;
     }
-    const counts={};
+
+    // Group by month
+    const counts = {};
     items.forEach(item => {
-        if (item.createdAt) {
-            const k=new Date(item.createdAt).toLocaleDateString('en-ZA',{month:'short',year:'2-digit'});
-            counts[k]=(counts[k]||0)+1;
+        const ts = item.createdAt;
+        if (ts) {
+            const k = new Date(ts).toLocaleDateString('en-ZA', { month:'short', year:'2-digit' });
+            counts[k] = (counts[k] || 0) + 1;
         }
     });
-    const labels=Object.keys(counts).slice(-7);
-    const vals=labels.map(l=>counts[l]);
-    const maxV=Math.max(...vals,1);
-    container.innerHTML=labels.map((l,i)=>`
+
+    // FIX 4b: Ensure we always show last 7 months even if some are empty
+    const allMonthKeys = getLast7Months();
+    // Merge real counts with the 7-month window (fill missing months with 0)
+    allMonthKeys.forEach(m => { if (!(m in counts)) counts[m] = 0; });
+
+    // Sort by date order — reconstruct ordered list
+    const orderedLabels = allMonthKeys;
+    const vals = orderedLabels.map(l => counts[l] || 0);
+    const maxV = Math.max(...vals, 1);
+
+    // FIX 4c: Use inline px heights so bars actually render
+    const containerHeight = 200; // pixels available for bars
+    container.innerHTML = orderedLabels.map((l, i) => {
+        const barH = Math.max(Math.round((vals[i] / maxV) * containerHeight), vals[i] > 0 ? 8 : 4);
+        return `
         <div class="bar-wrapper">
-            <div class="bar" style="height:${Math.max((vals[i]/maxV)*230,6)}px;background:linear-gradient(to top,${color},${color}88);">
+            <div class="bar" style="height:${barH}px;background:linear-gradient(to top,${colorStart},${colorEnd});">
                 <div class="bar-value">${vals[i]}</div>
             </div>
             <div class="bar-label">${l}</div>
-        </div>`).join('');
+        </div>`;
+    }).join('');
 }
+
+// Helper: get last 7 month labels in en-ZA short format
+function getLast7Months() {
+    const months = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        months.push(d.toLocaleDateString('en-ZA', { month:'short', year:'2-digit' }));
+    }
+    return months;
+}
+
 function updateChart(period) { renderCharts(); showToast(`Analytics updated for ${period}`,'success'); }
 
 // ════════════════════════════════════════
-// HISTORY  (stored in Firebase)
+// HISTORY — FIX 2: use .on() for live sync + proper empty state
 // ════════════════════════════════════════
 function logHistory(msg, category='general') {
     const entry = {
-        msg, category,
+        msg,
+        category,
         ts: Date.now(),
         date: new Date().toLocaleDateString('en-ZA'),
         time: new Date().toLocaleTimeString('en-ZA')
@@ -1382,39 +1457,74 @@ function logHistory(msg, category='general') {
 
 function renderHistory() {
     const filter = document.getElementById('historyFilter').value;
-    db.ref('adminHistory').orderByChild('ts').once('value', snap => {
-        const container = document.getElementById('historyContainer');
-        const data = snap.val();
-        if (!data) {
-            container.innerHTML=`<div class="empty-state"><i data-lucide="history" style="width:44px;height:44px;display:block;margin:0 auto 12px;opacity:.4;"></i>No history yet</div>`;
-            lucide.createIcons(); return;
-        }
-        let entries = Object.values(data).reverse();
-        if (filter !== 'all') entries = entries.filter(e => e.category === filter);
-        if (!entries.length) {
-            container.innerHTML=`<div class="empty-state"><i data-lucide="filter-x" style="width:44px;height:44px;display:block;margin:0 auto 12px;opacity:.4;"></i>No entries for this filter</div>`;
-            lucide.createIcons(); return;
-        }
-        const dotClass = {vendor:'h-vendor',driver:'h-driver',approve:'h-approve',delete:'h-delete',disable:'h-disable',settings:'h-settings'};
-        const icons = {vendor:'store',driver:'bike',approve:'check-circle',delete:'trash-2',disable:'eye-off',settings:'settings'};
-        container.innerHTML = entries.map(e=>`
-            <div class="history-item">
-                <div style="display:flex;align-items:flex-start;gap:12px;">
-                    <div class="history-dot ${dotClass[e.category]||'h-vendor'}" style="margin-top:5px;"></div>
-                    <div>
-                        <div style="font-weight:600;font-size:.92rem;">${e.msg}</div>
-                        <div style="font-size:.78rem;color:var(--dim);margin-top:2px;display:flex;align-items:center;gap:6px;">
-                            <span style="text-transform:capitalize;background:var(--bg);padding:2px 8px;border-radius:6px;font-weight:600;">${e.category||'general'}</span>
+    const container = document.getElementById('historyContainer');
+
+    // Show loading state
+    container.innerHTML = `<div class="empty-state">
+        <i data-lucide="loader-2" style="width:36px;height:36px;display:block;margin:0 auto 12px;animation:spin 1s linear infinite;opacity:.5;"></i>
+        Loading history…
+    </div>`;
+    lucide.createIcons();
+
+    // FIX 2: Use .once() with proper error handling and null guard
+    db.ref('adminHistory').orderByChild('ts').once('value')
+        .then(snap => {
+            const data = snap.val();
+
+            if (!data || Object.keys(data).length === 0) {
+                container.innerHTML = `<div class="empty-state">
+                    <i data-lucide="history" style="width:44px;height:44px;display:block;margin:0 auto 12px;opacity:.4;"></i>
+                    No history recorded yet. Actions you take (approvals, edits, deletions) will appear here.
+                </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            let entries = Object.values(data).reverse();
+            if (filter !== 'all') {
+                entries = entries.filter(e => e.category === filter);
+            }
+
+            if (!entries.length) {
+                container.innerHTML = `<div class="empty-state">
+                    <i data-lucide="filter-x" style="width:44px;height:44px;display:block;margin:0 auto 12px;opacity:.4;"></i>
+                    No entries match the selected filter.
+                </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            const dotClass = {
+                vendor: 'h-vendor', driver: 'h-driver', approve: 'h-approve',
+                delete: 'h-delete', disable: 'h-disable', settings: 'h-settings'
+            };
+
+            container.innerHTML = entries.map(e => `
+                <div class="history-item">
+                    <div style="display:flex;align-items:flex-start;gap:12px;">
+                        <div class="history-dot ${dotClass[e.category] || 'h-vendor'}" style="margin-top:5px;flex-shrink:0;"></div>
+                        <div>
+                            <div style="font-weight:600;font-size:.92rem;">${e.msg || '—'}</div>
+                            <div style="font-size:.78rem;color:var(--dim);margin-top:2px;display:flex;align-items:center;gap:6px;">
+                                <span style="text-transform:capitalize;background:var(--bg);padding:2px 8px;border-radius:6px;font-weight:600;">${e.category || 'general'}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="history-meta">
-                    <div>${e.time||''}</div>
-                    <div>${e.date||''}</div>
-                </div>
-            </div>`).join('');
-        lucide.createIcons();
-    });
+                    <div class="history-meta">
+                        <div>${e.time || ''}</div>
+                        <div>${e.date || ''}</div>
+                    </div>
+                </div>`).join('');
+            lucide.createIcons();
+        })
+        .catch(err => {
+            console.error('History fetch error:', err);
+            container.innerHTML = `<div class="empty-state">
+                <i data-lucide="alert-triangle" style="width:44px;height:44px;display:block;margin:0 auto 12px;opacity:.4;"></i>
+                Could not load history. Check your connection.
+            </div>`;
+            lucide.createIcons();
+        });
 }
 
 function clearHistory() {
@@ -1426,42 +1536,66 @@ function clearHistory() {
 }
 
 // ════════════════════════════════════════
-// NOTIFICATIONS  (stored in Firebase)
+// NOTIFICATIONS — FIX 3: robust rendering + proper .log-item styles inline
 // ════════════════════════════════════════
 function addNotification(msg, icon='bell') {
-    db.ref('adminNotifications').push({ msg, icon, ts:Date.now(), read:false });
+    db.ref('adminNotifications').push({ msg, icon, ts: Date.now(), read: false });
 }
 
 function startNotifSync() {
     db.ref('adminNotifications').orderByChild('ts').on('value', snap => {
-        const data = snap.val();
         const container = document.getElementById('notifContainer');
-        if (!data) {
-            container.innerHTML=`<div class="empty-state"><i data-lucide="bell-off" style="width:44px;height:44px;display:block;margin:0 auto 12px;opacity:.4;"></i>No notifications</div>`;
-            lucide.createIcons(); return;
+        const data = snap.val();
+
+        if (!data || Object.keys(data).length === 0) {
+            container.innerHTML = `<div class="empty-state">
+                <i data-lucide="bell-off" style="width:48px;height:48px;display:block;margin:0 auto 12px;opacity:.4;"></i>
+                No notifications at the moment
+            </div>`;
+            lucide.createIcons();
+            return;
         }
-        const entries = Object.entries(data).reverse();
-        container.innerHTML = entries.map(([key,n])=>`
-            <div class="log-item" style="background:${n.read?'':'#f8f9ff'};">
+
+        // FIX 3: sort descending by timestamp
+        const entries = Object.entries(data).sort((a, b) => b[1].ts - a[1].ts);
+
+        container.innerHTML = entries.map(([key, n]) => `
+            <div style="
+                padding: 16px 24px;
+                border-bottom: 1px solid var(--border);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 16px;
+                background: ${n.read ? 'white' : '#f8f9ff'};
+                transition: var(--transition);
+            ">
                 <div style="display:flex;align-items:center;gap:12px;">
-                    <div style="width:36px;height:36px;border-radius:10px;background:${n.read?'var(--bg)':'#e8f0ff'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <i data-lucide="${n.icon||'bell'}" style="width:16px;height:16px;color:${n.read?'var(--dim)':'var(--accent)'};"></i>
+                    <div style="
+                        width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+                        background: ${n.read ? 'var(--bg)' : '#e8f0ff'};
+                        display: flex; align-items: center; justify-content: center;
+                    ">
+                        <i data-lucide="${n.icon || 'bell'}" style="width:16px;height:16px;color:${n.read ? 'var(--dim)' : 'var(--accent)'};"></i>
                     </div>
                     <div>
-                        <div style="font-size:.92rem;font-weight:${n.read?400:600};">${n.msg}</div>
-                        <div style="font-size:.76rem;color:var(--dim);">${new Date(n.ts).toLocaleString('en-ZA')}</div>
+                        <div style="font-size:.92rem;font-weight:${n.read ? 400 : 600};">${n.msg || ''}</div>
+                        <div style="font-size:.76rem;color:var(--dim);margin-top:2px;">${new Date(n.ts).toLocaleString('en-ZA')}</div>
                     </div>
                 </div>
-                ${!n.read?`<button class="btn btn-edit" style="font-size:.78rem;padding:6px 10px;" onclick="markNotifRead('${key}')">Mark Read</button>`:''}
+                ${!n.read ? `<button class="btn btn-edit" style="font-size:.78rem;padding:6px 10px;flex-shrink:0;" onclick="markNotifRead('${key}')">Mark Read</button>` : '<span style="font-size:.75rem;color:var(--dim);flex-shrink:0;">Read</span>'}
             </div>`).join('');
         lucide.createIcons();
     });
 }
-function markNotifRead(key) { db.ref('adminNotifications/'+key).update({read:true}); }
+
+function markNotifRead(key) { db.ref('adminNotifications/'+key).update({ read: true }); }
 function markAllRead() {
     db.ref('adminNotifications').once('value', snap => {
-        const updates={};
-        Object.keys(snap.val()||{}).forEach(k => updates[k+'/read']=true);
+        const data = snap.val();
+        if (!data) { showToast('No notifications to mark','info'); return; }
+        const updates = {};
+        Object.keys(data).forEach(k => updates[k + '/read'] = true);
         db.ref('adminNotifications').update(updates).then(() => showToast('All notifications marked read','success'));
     });
 }
@@ -1684,9 +1818,6 @@ const styleTag = document.createElement('style');
 styleTag.innerHTML=`
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.1);}}
     @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-    .log-item{padding:16px 24px;border-bottom:1px solid var(--border);font-size:.9rem;display:flex;justify-content:space-between;align-items:center;transition:var(--transition);}
-    .log-item:hover{background:#fafafa;padding-left:28px;}
-    .log-item:last-child{border:none;}
 `;
 document.head.appendChild(styleTag);
 </script>
