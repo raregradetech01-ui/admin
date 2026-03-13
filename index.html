@@ -249,6 +249,7 @@
         .toggle.active::after { transform: translateX(22px); }
         .settings-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px; font-family: inherit; font-size: .88rem; outline: none; cursor: pointer; background: var(--bg); color: var(--text); }
         .settings-select:focus { border-color: var(--accent); }
+<!DOCTYPE html>
 
         /* ─── CHART ─────────────────────────────────── */
         /* FIX 4: chart container needs explicit height and proper overflow */
@@ -2534,7 +2535,7 @@ function showToast(msg, type='success') {
 // SHIMMER LOADER — dismiss after 8–10 s
 // ════════════════════════════════════════
 (function() {
-    const delay = 8000 + Math.random() * 2000; // 8000–10000 ms
+    const delay = 8000 + Math.random() * 800; // 8000–10000 ms
     const overlay = document.getElementById('shimmerOverlay');
     setTimeout(() => {
         overlay.classList.add('fade-out');
