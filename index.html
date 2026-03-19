@@ -213,6 +213,128 @@
         .settings-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px; font-family: inherit; font-size: .88rem; outline: none; cursor: pointer; background: var(--bg); color: var(--text); }
         .settings-select:focus { border-color: var(--accent); }
 
+        /* ── Delivery Fee Settings Input ── */
+        .fee-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .fee-input-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,122,255,.1);
+        }
+        .fee-prefix {
+            padding: 7px 10px 7px 12px;
+            font-size: .88rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: transparent;
+            border: none;
+            flex-shrink: 0;
+        }
+        .fee-input {
+            width: 80px;
+            padding: 7px 4px;
+            font-size: .88rem;
+            font-family: inherit;
+            font-weight: 700;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+        }
+        .fee-suffix {
+            padding: 7px 12px 7px 4px;
+            font-size: .82rem;
+            color: var(--dim);
+            background: transparent;
+            border: none;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        /* ── Delivery Fee Calculator (inline in settings) ── */
+        .fee-calculator {
+            background: linear-gradient(135deg, #f0f8ff, #eef3ff);
+            border: 1.5px solid #c8dfff;
+            border-radius: 14px;
+            padding: 18px;
+            margin-top: 16px;
+        }
+        .fee-calculator h4 {
+            font-size: .78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .fee-calc-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .fee-calc-input {
+            padding: 9px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: .88rem;
+            font-family: inherit;
+            outline: none;
+            background: white;
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .fee-calc-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,122,255,.1); }
+        .fee-calc-result {
+            background: white;
+            border: 1.5px solid #c8dfff;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .88rem;
+            margin-top: 4px;
+        }
+        .fee-calc-result .res-label { color: var(--dim); font-weight: 500; }
+        .fee-calc-result .res-value { font-weight: 800; color: var(--accent); font-size: 1rem; }
+
+        /* ── Delivery Fee tier table ── */
+        .fee-tier-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: .83rem;
+        }
+        .fee-tier-table th {
+            padding: 8px 12px;
+            background: #f0f4ff;
+            color: var(--accent);
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            font-weight: 700;
+        }
+        .fee-tier-table td {
+            padding: 9px 12px;
+            border-top: 1px solid var(--border);
+            font-size: .83rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .fee-tier-table tr:hover td { background: #f8f9ff; }
+
         .chart-container { padding: 24px; height: 260px; display: flex; align-items: flex-end; justify-content: space-around; gap: 12px; overflow: hidden; }
         .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; max-width: 80px; }
         .bar { width: 100%; max-width: 56px; background: linear-gradient(to top, var(--accent), #5856d6); border-radius: 8px 8px 0 0; transition: height 1s cubic-bezier(.4,0,.2,1); opacity: .82; position: relative; cursor: default; min-height: 4px; }
@@ -392,7 +514,6 @@
         .loc-detect-btn.loading svg { animation: spin 0.8s linear infinite; }
         .loc-detect-btn.loading { pointer-events: none; background: #f0fdf4; }
 
-        /* Suggestions dropdown */
         .loc-suggestions {
             position: absolute;
             top: calc(100% + 6px);
@@ -446,7 +567,6 @@
             gap: 8px;
         }
 
-        /* Selected location display */
         .loc-selected-chip {
             display: none;
             align-items: center;
@@ -465,7 +585,6 @@
         .loc-selected-chip .chip-clear { color: #16a34a; cursor: pointer; width: 16px; height: 16px; flex-shrink: 0; transition: color .2s; }
         .loc-selected-chip .chip-clear:hover { color: var(--danger); }
 
-        /* Coordinates row */
         .loc-coords-row {
             display: none;
             gap: 8px;
@@ -496,7 +615,6 @@
             font-weight: 600;
         }
 
-        /* Driver notification alert banner */
         .driver-alert-banner {
             background: linear-gradient(135deg, #fff8e1, #fffde7);
             border: 1.5px solid #ffd54f;
@@ -530,6 +648,39 @@
             padding: 4px 12px;
             border-radius: 999px;
             flex-shrink: 0;
+        }
+
+        /* ── Delivery Fee Dashboard Banner ── */
+        .delivery-fee-banner {
+            background: linear-gradient(135deg, #f0f8ff, #e8f0ff);
+            border: 1.5px solid #c8dfff;
+            border-radius: 16px;
+            padding: 16px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            animation: fadeIn .4s ease-out;
+        }
+        .delivery-fee-banner .dfb-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, var(--accent), #5856d6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .delivery-fee-banner .dfb-info { flex: 1; }
+        .delivery-fee-banner .dfb-title { font-weight: 700; font-size: .95rem; color: #003d7a; }
+        .delivery-fee-banner .dfb-sub { font-size: .8rem; color: #2563eb; margin-top: 2px; }
+        .delivery-fee-banner .dfb-rate {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            flex-shrink: 0;
+            letter-spacing: -.5px;
         }
     </style>
 </head>
@@ -629,6 +780,20 @@
             <i data-lucide="plus" style="width:18px;height:18px;"></i> Add Vendor
         </button>
     </div>
+
+    <!-- Delivery Fee Banner -->
+    <div class="delivery-fee-banner" id="dashDeliveryFeeBanner">
+        <div class="dfb-icon"><i data-lucide="truck" style="width:20px;height:20px;color:white;"></i></div>
+        <div class="dfb-info">
+            <div class="dfb-title">Active Delivery Fee Rate</div>
+            <div class="dfb-sub">Fee is calculated per km between vendor and delivery address</div>
+        </div>
+        <div class="dfb-rate" id="dashFeeRateDisplay">R10/km</div>
+        <button class="btn btn-edit" style="flex-shrink:0;" onclick="showTab('settings',document.querySelectorAll('.nav-item')[6])">
+            Manage Fees
+        </button>
+    </div>
+
     <!-- Driver pending alert banner -->
     <div class="driver-alert-banner" id="dashDriverAlert">
         <div class="alert-icon"><i data-lucide="user-check" style="width:20px;height:20px;color:white;"></i></div>
@@ -641,6 +806,7 @@
             Review Now
         </button>
     </div>
+
     <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.8px;color:var(--dim);font-weight:700;margin-bottom:12px;">Vendors</p>
     <div class="stats-grid" style="margin-bottom:20px;">
         <div class="stat-card"><h3><i data-lucide="users" style="width:15px;height:15px;"></i> Total Vendors</h3><p id="stat-total">0</p></div>
@@ -733,7 +899,6 @@
             </button>
         </div>
     </div>
-    <!-- Driver pending alert for drivers tab -->
     <div class="driver-alert-banner" id="driversTabAlert">
         <div class="alert-icon"><i data-lucide="clock" style="width:20px;height:20px;color:white;"></i></div>
         <div class="alert-text">
@@ -834,6 +999,110 @@
         </button>
     </div>
     <div class="settings-grid">
+
+        <!-- ══════════════════════════════════
+             DELIVERY FEE SETTINGS CARD (NEW)
+             ══════════════════════════════════ -->
+        <div class="settings-card" style="border: 2px solid #c8dfff; background: linear-gradient(135deg, #f8fcff, #f0f6ff);">
+            <h3 style="margin-bottom:6px;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="truck" style="width:18px;height:18px;color:var(--accent);"></i> Delivery Fees
+            </h3>
+            <p style="font-size:.82rem;color:var(--dim);margin-bottom:18px;">
+                Set the rate per km. Fees are calculated using the straight-line distance between the vendor and the customer's delivery address.
+            </p>
+
+            <div class="settings-item">
+                <div>
+                    <div style="font-weight:600;">Fee Per Kilometre</div>
+                    <div style="font-size:.83rem;color:var(--dim);">Applied to all orders on the platform</div>
+                </div>
+                <div class="fee-input-wrap">
+                    <span class="fee-prefix">R</span>
+                    <input type="number" class="fee-input" id="fee-per-km" value="10" min="1" max="100" step="0.5" onchange="onFeeRateChange()" oninput="onFeeRateChange()">
+                    <span class="fee-suffix">/km</span>
+                </div>
+            </div>
+
+            <div class="settings-item">
+                <div>
+                    <div style="font-weight:600;">Minimum Delivery Fee</div>
+                    <div style="font-size:.83rem;color:var(--dim);">Minimum charged even for very short distances</div>
+                </div>
+                <div class="fee-input-wrap">
+                    <span class="fee-prefix">R</span>
+                    <input type="number" class="fee-input" id="fee-minimum" value="15" min="0" max="100" step="1" style="width:64px;">
+                </div>
+            </div>
+
+            <div class="settings-item">
+                <div>
+                    <div style="font-weight:600;">Maximum Delivery Fee Cap</div>
+                    <div style="font-size:.83rem;color:var(--dim);">No order charged above this amount</div>
+                </div>
+                <div class="fee-input-wrap">
+                    <span class="fee-prefix">R</span>
+                    <input type="number" class="fee-input" id="fee-maximum" value="120" min="0" max="1000" step="5" style="width:64px;">
+                </div>
+            </div>
+
+            <div class="settings-item" style="border-bottom:none;">
+                <div>
+                    <div style="font-weight:600;">Free Delivery Threshold</div>
+                    <div style="font-size:.83rem;color:var(--dim);">Order total above which delivery is free (0 = disabled)</div>
+                </div>
+                <div class="fee-input-wrap">
+                    <span class="fee-prefix">R</span>
+                    <input type="number" class="fee-input" id="fee-free-threshold" value="0" min="0" max="5000" step="10" style="width:72px;">
+                    <span class="fee-suffix">order</span>
+                </div>
+            </div>
+
+            <!-- Fee preview table -->
+            <div style="margin-top: 18px;">
+                <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="table-2" style="width:12px;height:12px;"></i> Fee Preview Table
+                </p>
+                <table class="fee-tier-table" id="feeTierTable">
+                    <thead>
+                        <tr><th>Distance</th><th>Calculated Fee</th><th>After Min/Max</th></tr>
+                    </thead>
+                    <tbody id="feeTierBody"></tbody>
+                </table>
+            </div>
+
+            <!-- Live calculator -->
+            <div class="fee-calculator">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="14"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                    Live Delivery Fee Calculator
+                </h4>
+                <div class="fee-calc-row">
+                    <div>
+                        <label style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--dim);display:block;margin-bottom:5px;">Distance (km)</label>
+                        <input type="number" class="fee-calc-input" id="calc-distance" placeholder="e.g. 7.5" min="0" step="0.1" oninput="recalcFee()">
+                    </div>
+                    <div>
+                        <label style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--dim);display:block;margin-bottom:5px;">Order Total (R)</label>
+                        <input type="number" class="fee-calc-input" id="calc-order-total" placeholder="e.g. 250" min="0" step="1" oninput="recalcFee()">
+                    </div>
+                </div>
+                <div class="fee-calc-result" id="calcResult" style="display:none;">
+                    <div>
+                        <div class="res-label" id="calcResultLabel">Delivery Fee</div>
+                        <div style="font-size:.72rem;color:var(--dim);margin-top:2px;" id="calcResultBreakdown"></div>
+                    </div>
+                    <div class="res-value" id="calcResultValue">R0</div>
+                </div>
+            </div>
+
+            <div style="margin-top:16px;">
+                <button class="btn-primary" style="width:100%;justify-content:center;" onclick="saveDeliveryFeeSettings()">
+                    <i data-lucide="save" style="width:16px;height:16px;"></i> Save Delivery Fee Settings
+                </button>
+            </div>
+        </div>
+        <!-- END DELIVERY FEE CARD -->
+
         <div class="settings-card">
             <h3 style="margin-bottom:14px;display:flex;align-items:center;gap:8px;"><i data-lucide="bell-ring" style="width:18px;height:18px;color:var(--accent);"></i> Notifications</h3>
             <div class="settings-item"><div><div style="font-weight:600;">Email Alerts</div><div style="font-size:.83rem;color:var(--dim);">Receive daily summary emails</div></div><div class="toggle active" id="tog-email" onclick="toggleSetting(this,'emailAlerts')"></div></div>
@@ -943,10 +1212,8 @@
             <div class="form-group"><label>Website / Social Media Link</label><input type="url" id="av-website" placeholder="https://www.business.co.za or @handle"></div>
         </div>
 
-        <!-- Location with modern search -->
         <div style="background:#fff8f0;border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid #fde8cc;">
             <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--warning);margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i data-lucide="map-pin" style="width:13px;height:13px;"></i> Location</p>
-            <!-- Modern Location Picker -->
             <div id="av-loc-picker"></div>
             <input type="hidden" id="av-lat">
             <input type="hidden" id="av-lng">
@@ -1088,7 +1355,6 @@
             <div class="form-group"><label>Website / Social Media Link</label><input type="url" id="ev-website"></div>
         </div>
 
-        <!-- Edit Vendor Location -->
         <div style="background:#fff8f0;border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid #fde8cc;">
             <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--warning);margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i data-lucide="map-pin" style="width:13px;height:13px;"></i> Location</p>
             <div id="ev-loc-picker"></div>
@@ -1389,6 +1655,208 @@ const storeTypeLabels = {
     electronics: '📱 Electronics',
 };
 
+// ══════════════════════════════════════════════════════════
+// DELIVERY FEE ENGINE
+// ══════════════════════════════════════════════════════════
+
+// In-memory delivery fee config (loaded from Firebase + localStorage)
+let deliveryFeeConfig = {
+    ratePerKm:      10,   // R per km
+    minimumFee:     15,   // minimum charged
+    maximumFee:     120,  // cap
+    freeThreshold:  0,    // order total above which delivery is free (0 = disabled)
+};
+
+/**
+ * Haversine formula — straight-line distance between two lat/lng points in km.
+ * @param {number} lat1
+ * @param {number} lng1
+ * @param {number} lat2
+ * @param {number} lng2
+ * @returns {number} distance in kilometres
+ */
+function haversineDistanceKm(lat1, lng1, lat2, lng2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+/**
+ * Calculate delivery fee given a distance and order total.
+ * @param {number} distanceKm
+ * @param {number} orderTotal
+ * @param {object} [cfg] - optional override config
+ * @returns {{ fee: number, isFree: boolean, breakdown: string }}
+ */
+function calcDeliveryFee(distanceKm, orderTotal = 0, cfg = deliveryFeeConfig) {
+    const { ratePerKm, minimumFee, maximumFee, freeThreshold } = cfg;
+
+    // Free delivery threshold
+    if (freeThreshold > 0 && orderTotal >= freeThreshold) {
+        return {
+            fee: 0,
+            isFree: true,
+            breakdown: `Free delivery — order total R${orderTotal.toFixed(2)} ≥ threshold R${freeThreshold.toFixed(2)}`,
+        };
+    }
+
+    let raw = distanceKm * ratePerKm;
+    let fee = raw;
+
+    // Apply minimum
+    if (minimumFee > 0 && fee < minimumFee) fee = minimumFee;
+
+    // Apply maximum cap
+    if (maximumFee > 0 && fee > maximumFee) fee = maximumFee;
+
+    const parts = [`${distanceKm.toFixed(2)} km × R${ratePerKm}/km = R${raw.toFixed(2)}`];
+    if (minimumFee > 0 && raw < minimumFee) parts.push(`min fee applied: R${minimumFee}`);
+    if (maximumFee > 0 && raw > maximumFee) parts.push(`capped at R${maximumFee}`);
+
+    return { fee, isFree: false, breakdown: parts.join(' · ') };
+}
+
+/**
+ * Calculate delivery fee between two coordinate pairs.
+ * @param {number} vendorLat
+ * @param {number} vendorLng
+ * @param {number} deliveryLat
+ * @param {number} deliveryLng
+ * @param {number} [orderTotal]
+ * @returns {{ distanceKm: number, fee: number, isFree: boolean, breakdown: string }}
+ */
+function calcDeliveryFeeByCoords(vendorLat, vendorLng, deliveryLat, deliveryLng, orderTotal = 0) {
+    const distanceKm = haversineDistanceKm(vendorLat, vendorLng, deliveryLat, deliveryLng);
+    const result = calcDeliveryFee(distanceKm, orderTotal);
+    return { distanceKm, ...result };
+}
+
+// ── Load fee config from Firebase & localStorage ─────────────────────────
+function loadDeliveryFeeConfig() {
+    // Load from localStorage first for instant display
+    const local = JSON.parse(localStorage.getItem('vynix_delivery_fees') || 'null');
+    if (local) {
+        Object.assign(deliveryFeeConfig, local);
+        applyFeeConfigToUI();
+    }
+
+    // Sync from Firebase (source of truth)
+    db.ref('deliveryFeeConfig').on('value', snap => {
+        const data = snap.val();
+        if (data) {
+            Object.assign(deliveryFeeConfig, data);
+            applyFeeConfigToUI();
+        }
+    });
+}
+
+function applyFeeConfigToUI() {
+    const { ratePerKm, minimumFee, maximumFee, freeThreshold } = deliveryFeeConfig;
+    const fkmEl = document.getElementById('fee-per-km');
+    const fminEl = document.getElementById('fee-minimum');
+    const fmaxEl = document.getElementById('fee-maximum');
+    const fthrEl = document.getElementById('fee-free-threshold');
+    if (fkmEl) fkmEl.value = ratePerKm;
+    if (fminEl) fminEl.value = minimumFee;
+    if (fmaxEl) fmaxEl.value = maximumFee;
+    if (fthrEl) fthrEl.value = freeThreshold;
+    updateFeePreviewTable();
+    updateDashboardFeeBanner();
+}
+
+function updateDashboardFeeBanner() {
+    const el = document.getElementById('dashFeeRateDisplay');
+    if (el) el.textContent = `R${deliveryFeeConfig.ratePerKm}/km`;
+}
+
+function onFeeRateChange() {
+    // Live-update the preview table as the admin types
+    const val = parseFloat(document.getElementById('fee-per-km').value) || 10;
+    deliveryFeeConfig.ratePerKm = val;
+    updateFeePreviewTable();
+    recalcFee();
+    updateDashboardFeeBanner();
+}
+
+function updateFeePreviewTable() {
+    const tbody = document.getElementById('feeTierBody');
+    if (!tbody) return;
+    const cfg = {
+        ratePerKm:     parseFloat(document.getElementById('fee-per-km')?.value)     || deliveryFeeConfig.ratePerKm,
+        minimumFee:    parseFloat(document.getElementById('fee-minimum')?.value)     || deliveryFeeConfig.minimumFee,
+        maximumFee:    parseFloat(document.getElementById('fee-maximum')?.value)     || deliveryFeeConfig.maximumFee,
+        freeThreshold: parseFloat(document.getElementById('fee-free-threshold')?.value) || deliveryFeeConfig.freeThreshold,
+    };
+    const distances = [1, 2, 3, 5, 7, 10, 15, 20, 25, 30];
+    tbody.innerHTML = distances.map(d => {
+        const raw = (d * cfg.ratePerKm).toFixed(2);
+        const { fee, isFree } = calcDeliveryFee(d, 0, cfg);
+        const feeStr = isFree ? 'FREE' : `R${fee.toFixed(2)}`;
+        const rawStr = `R${raw}`;
+        const differs = !isFree && parseFloat(raw) !== fee;
+        return `<tr>
+            <td>${d} km</td>
+            <td style="color:var(--dim);">${rawStr}</td>
+            <td style="font-weight:700;color:${isFree ? 'var(--success)' : (differs ? 'var(--warning)' : 'var(--text)')}">${feeStr}${differs ? ' *' : ''}</td>
+        </tr>`;
+    }).join('');
+}
+
+function recalcFee() {
+    const dist = parseFloat(document.getElementById('calc-distance')?.value);
+    const orderTotal = parseFloat(document.getElementById('calc-order-total')?.value) || 0;
+    const resultEl = document.getElementById('calcResult');
+    if (!resultEl) return;
+
+    if (isNaN(dist) || dist < 0) { resultEl.style.display = 'none'; return; }
+
+    const cfg = {
+        ratePerKm:     parseFloat(document.getElementById('fee-per-km')?.value)     || deliveryFeeConfig.ratePerKm,
+        minimumFee:    parseFloat(document.getElementById('fee-minimum')?.value)     || deliveryFeeConfig.minimumFee,
+        maximumFee:    parseFloat(document.getElementById('fee-maximum')?.value)     || deliveryFeeConfig.maximumFee,
+        freeThreshold: parseFloat(document.getElementById('fee-free-threshold')?.value) || deliveryFeeConfig.freeThreshold,
+    };
+
+    const { fee, isFree, breakdown } = calcDeliveryFee(dist, orderTotal, cfg);
+    resultEl.style.display = 'flex';
+    document.getElementById('calcResultLabel').textContent = isFree ? '🎉 Free Delivery!' : 'Delivery Fee';
+    document.getElementById('calcResultValue').textContent = isFree ? 'R0.00' : `R${fee.toFixed(2)}`;
+    document.getElementById('calcResultBreakdown').textContent = breakdown;
+    document.getElementById('calcResultValue').style.color = isFree ? 'var(--success)' : 'var(--accent)';
+}
+
+function saveDeliveryFeeSettings() {
+    const ratePerKm     = parseFloat(document.getElementById('fee-per-km').value);
+    const minimumFee    = parseFloat(document.getElementById('fee-minimum').value) || 0;
+    const maximumFee    = parseFloat(document.getElementById('fee-maximum').value) || 0;
+    const freeThreshold = parseFloat(document.getElementById('fee-free-threshold').value) || 0;
+
+    if (isNaN(ratePerKm) || ratePerKm <= 0) {
+        showToast('Rate per km must be greater than 0', 'error'); return;
+    }
+    if (maximumFee > 0 && minimumFee > maximumFee) {
+        showToast('Minimum fee cannot exceed maximum fee', 'error'); return;
+    }
+
+    const config = { ratePerKm, minimumFee, maximumFee, freeThreshold, updatedAt: Date.now() };
+
+    // Save to Firebase (so customer app can read it)
+    db.ref('deliveryFeeConfig').set(config).then(() => {
+        Object.assign(deliveryFeeConfig, config);
+        localStorage.setItem('vynix_delivery_fees', JSON.stringify(config));
+        showToast(`Delivery fee saved: R${ratePerKm}/km`, 'success');
+        logHistory(`Updated delivery fee: R${ratePerKm}/km · min R${minimumFee} · max R${maximumFee > 0 ? 'R'+maximumFee : 'none'} · free threshold R${freeThreshold > 0 ? freeThreshold : 'off'}`, 'settings');
+        updateDashboardFeeBanner();
+        updateFeePreviewTable();
+    }).catch(() => showToast('Error saving delivery fee settings', 'error'));
+}
+
 // ══════════════════════════════════════════════════
 // MODERN LOCATION PICKER (Custom Mapbox Autocomplete)
 // ══════════════════════════════════════════════════
@@ -1489,9 +1957,7 @@ class LocationPicker {
         });
 
         this.clearBtn.addEventListener('click', () => this.clear());
-
         this.chipClear.addEventListener('click', () => this.clear());
-
         this.detectBtn.addEventListener('click', () => this.detectLocation());
     }
 
@@ -1565,10 +2031,9 @@ class LocationPicker {
         this.clearBtn.classList.add('show');
         this.closeSuggestions();
 
-        // Auto-fill address fields if present
         const ctx = feature.context || [];
-        const place  = ctx.find(c => c.id.startsWith('place'))?.text || '';
-        const region = ctx.find(c => c.id.startsWith('region'))?.text || '';
+        const place    = ctx.find(c => c.id.startsWith('place'))?.text || '';
+        const region   = ctx.find(c => c.id.startsWith('region'))?.text || '';
         const postcode = ctx.find(c => c.id.startsWith('postcode'))?.text || '';
 
         const prefix = this.latInput.id.replace('-lat', '');
@@ -1660,29 +2125,26 @@ class LocationPicker {
     }
 }
 
-// Instantiate location pickers
 let avPicker = null;
 let evPicker = null;
 
 function initLocationPickers() {
-    // Only init if container exists and not already done
     const avCon = document.getElementById('av-loc-picker');
     if (avCon && !avPicker) avPicker = new LocationPicker('av-loc-picker','av-lat','av-lng');
     const evCon = document.getElementById('ev-loc-picker');
     if (evCon && !evPicker) evPicker = new LocationPicker('ev-loc-picker','ev-lat','ev-lng');
 }
 
-// Init on DOMContentLoaded and also when modals open
 document.addEventListener('DOMContentLoaded', initLocationPickers);
 setTimeout(initLocationPickers, 200);
 
-// ── Sidebar ───────────────────────────────────────────────────────────────
+// ── Sidebar ─────────────────────────────────────────────────────────────
 const sidebar = document.getElementById('mainSidebar');
 const mainPanel = document.getElementById('mainPanel');
 sidebar.addEventListener('mouseenter', () => { sidebar.classList.add('expanded'); mainPanel.classList.add('shifted'); });
 sidebar.addEventListener('mouseleave', () => { sidebar.classList.remove('expanded'); mainPanel.classList.remove('shifted'); });
 
-// ── Tab navigation ─────────────────────────────────────────────────────────
+// ── Tab navigation ─────────────────────────────────────────────────────
 function showTab(id, el) {
     document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1691,9 +2153,9 @@ function showTab(id, el) {
     setTimeout(() => lucide.createIcons(), 50);
     if (id === 'analytics') setTimeout(renderCharts, 120);
     if (id === 'history') renderHistory();
+    if (id === 'settings') { updateFeePreviewTable(); recalcFee(); }
 }
 
-// ── ID generator ───────────────────────────────────────────────────────────
 function genID(prefix) {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     const arr = new Uint8Array(6);
@@ -1701,7 +2163,6 @@ function genID(prefix) {
     return prefix + Array.from(arr, b => chars[b % chars.length]).join('');
 }
 
-// ── Modal helpers ──────────────────────────────────────────────────────────
 function showModal(id) {
     const el = document.getElementById(id);
     el.style.display = 'flex';
@@ -1924,7 +2385,6 @@ function openEditVendorModal(key) {
 
     showModal('editVendorModal');
 
-    // Init edit picker and prefill with saved location
     setTimeout(() => {
         const savedLat = v.lat || addr.lat || '';
         const savedLng = v.lng || addr.lng || '';
@@ -2019,7 +2479,6 @@ function approveVendor(key, name) {
 // ════════════════════════════════════════
 // DRIVERS
 // ════════════════════════════════════════
-// Track notified new driver applications so we only fire once per driver
 const _notifiedDriverApplications = new Set();
 
 function startDriverSync() {
@@ -2034,7 +2493,6 @@ function startDriverSync() {
 function checkNewDriverApplications() {
     const pendingDrivers = Object.entries(driversCache).filter(([,d]) => d.status === 'pending');
 
-    // Show/hide dashboard alert banner
     const dashAlert = document.getElementById('dashDriverAlert');
     const dashCount = document.getElementById('dashDriverAlertCount');
     const tabAlert = document.getElementById('driversTabAlert');
@@ -2050,17 +2508,14 @@ function checkNewDriverApplications() {
         tabAlert.classList.remove('show');
     }
 
-    // Notify for brand-new pending drivers (not yet notified)
     pendingDrivers.forEach(([key, d]) => {
         if (!_notifiedDriverApplications.has(key)) {
             _notifiedDriverApplications.add(key);
             const fullName = `${d.firstName||''} ${d.lastName||''}`.trim();
-            // Only fire notification if this is a new entry (less than 5 min old)
             if (d.createdAt && Date.now() - d.createdAt < 300000) {
                 addNotification(`🚗 New driver application: ${fullName} — awaiting review`, 'bike');
                 logHistory(`New driver application received: ${fullName}`, 'driver');
                 showToast(`New driver application: ${fullName}`, 'info');
-                // Also write a dedicated Firebase notification for the driver app
                 db.ref('driverApplicationNotifications').push({
                     driverKey: key,
                     driverName: fullName,
@@ -2102,7 +2557,6 @@ function renderDriverTable() {
         const fullName = (d.firstName||'') + ' ' + (d.lastName||'');
         const avatar = d.imageURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=5856d6&color=fff&size=80&bold=true&rounded=true`;
         const badge = statusBadge(d.status);
-        // Pending drivers get a highlighted approve button
         const approveBtn = d.status==='pending' ? `
             <button class="btn btn-approve" style="background:var(--purple);box-shadow:0 2px 8px rgba(88,86,214,.3);animation:pendingPulse 2s ease-in-out infinite;" onclick="approveDriver('${key}','${escS(fullName)}')">
                 <i data-lucide="check" style="width:13px;height:13px;"></i> Approve
@@ -2111,7 +2565,6 @@ function renderDriverTable() {
             ? `<button class="btn btn-disable" onclick="openDisableModal('${key}','${escS(fullName)}','driver','disable')"><i data-lucide="eye-off" style="width:13px;height:13px;"></i></button>`
             : `<button class="btn btn-enable" onclick="openDisableModal('${key}','${escS(fullName)}','driver','enable')"><i data-lucide="eye" style="width:13px;height:13px;"></i></button>`;
 
-        // Show login-blocked indicator for pending/disabled drivers
         const loginStatus = d.status === 'active'
             ? `<span style="font-size:.73rem;color:var(--success);font-weight:600;display:flex;align-items:center;gap:3px;margin-top:3px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Login enabled</span>`
             : `<span style="font-size:.73rem;color:var(--danger);font-weight:600;display:flex;align-items:center;gap:3px;margin-top:3px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="11" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Login blocked</span>`;
@@ -2141,7 +2594,6 @@ function renderDriverTable() {
     }).join('');
     lucide.createIcons();
 
-    // Add pending pulse keyframe if not done yet
     if (!document.getElementById('pendingPulseStyle')) {
         const s = document.createElement('style');
         s.id = 'pendingPulseStyle';
@@ -2180,7 +2632,6 @@ async function saveNewDriver() {
         firstName:fname, lastName:lname, phone, email,
         vehicleType:vehicle, vehicleDesc, idNumber:idNum, licenseNumber:license,
         status, createdAt:Date.now(), imageURL,
-        // Key field for driver app login gate
         isApproved: status === 'active',
         loginEnabled: status === 'active',
     };
@@ -2245,7 +2696,6 @@ function openViewDriverModal(key) {
     const fullName = (d.firstName||'') + ' ' + (d.lastName||'');
     const avatar = d.imageURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=5856d6&color=fff&size=160&bold=true&rounded=true`;
 
-    // Login gate status block
     const loginBlock = d.status === 'active'
         ? `<div style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1.5px solid #a7f3d0;border-radius:14px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
                 <div style="width:36px;height:36px;border-radius:10px;background:#34c759;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -2312,7 +2762,6 @@ function approveDriver(key, name) {
         showToast(`✅ Approved "${name}" — ID #${id}`,'success');
         logHistory(`Approved driver: ${name} (ID #${id})`, 'approve');
         addNotification(`Driver "${name}" approved — ID #${id}. Login access granted.`, 'check-circle');
-        // Write approval back so driver app can check
         db.ref('driverApprovals').child(key).set({
             driverID: id,
             approvedAt: Date.now(),
@@ -2376,7 +2825,6 @@ function confirmDisable() {
     const upd = { status: action==='disable'?'disabled':'active' };
     if (action==='disable' && reason) upd.disableReason=reason; else upd.disableReason=null;
     if (action==='enable') upd.enabledAt=Date.now();
-    // For drivers: update login gate flags
     if (type === 'driver') {
         upd.isApproved = action === 'enable';
         upd.loginEnabled = action === 'enable';
@@ -2721,7 +3169,21 @@ async function exportPDF(){
         doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text(c.l,x+cW/2,y+19,{align:'center'});
     });
     y+=32;
-    doc.setTextColor(29,29,31);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('Financial Overview (ZAR)',14,y);y+=6;
+
+    // Delivery Fee summary block in PDF
+    doc.setTextColor(29,29,31);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('Delivery Fee Configuration',14,y);y+=6;
+    doc.autoTable({startY:y,head:[['Setting','Value']],body:[
+        ['Rate Per Kilometre',`R${deliveryFeeConfig.ratePerKm}/km`],
+        ['Minimum Fee',deliveryFeeConfig.minimumFee>0?`R${deliveryFeeConfig.minimumFee}`:'None'],
+        ['Maximum Fee (Cap)',deliveryFeeConfig.maximumFee>0?`R${deliveryFeeConfig.maximumFee}`:'None'],
+        ['Free Delivery Threshold',deliveryFeeConfig.freeThreshold>0?`R${deliveryFeeConfig.freeThreshold} order total`:'Disabled'],
+        ['Sample: 5 km fee',`R${calcDeliveryFee(5,0).fee.toFixed(2)}`],
+        ['Sample: 10 km fee',`R${calcDeliveryFee(10,0).fee.toFixed(2)}`],
+        ['Sample: 20 km fee',`R${calcDeliveryFee(20,0).fee.toFixed(2)}`],
+    ],headStyles:{fillColor:[0,122,255],fontStyle:'bold',fontSize:9},bodyStyles:{fontSize:9},alternateRowStyles:{fillColor:[245,248,252]},columnStyles:{1:{halign:'right',fontStyle:'bold'}},margin:{left:14,right:14}});
+    y=doc.lastAutoTable.finalY+8;
+
+    doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('Financial Overview (ZAR)',14,y);y+=6;
     doc.autoTable({startY:y,head:[['Metric','Value (ZAR)']],body:[
         ['Est. Monthly Vendor Revenue',`R ${(vAct*4800).toLocaleString('en-ZA')}`],
         ['Est. Monthly Driver Revenue',`R ${(dAct*1200).toLocaleString('en-ZA')}`],
@@ -2793,6 +3255,10 @@ startNotifSync();
 startOrderSync();
 loadSettings();
 loadProfile();
+loadDeliveryFeeConfig();
+
+// Init fee table on load
+setTimeout(() => { updateFeePreviewTable(); }, 300);
 
 const styleTag=document.createElement('style');
 styleTag.innerHTML=`
