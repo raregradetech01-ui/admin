@@ -650,7 +650,6 @@
             border: 1px solid var(--border);
             border-radius: 16px;
             overflow: hidden;
-            margin-bottom: 16px;
             transition: var(--transition);
         }
         .pending-image-card:hover {
@@ -659,7 +658,7 @@
         }
         .pending-image-preview {
             width: 100%;
-            height: 180px;
+            height: 130px;
             object-fit: cover;
             background: var(--bg);
         }
@@ -689,6 +688,12 @@
         .pending-image-actions {
             display: flex;
             gap: 8px;
+        }
+        #pendingImagesContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            padding: 16px;
         }
     </style>
 </head>
@@ -3032,7 +3037,7 @@ function showToast(msg,type='success'){
 // ════════════════════════════════════════
 function loadPendingImages() {
     const container = document.getElementById('pendingImagesContainer');
-    let html = '<div style="padding:16px;">';
+    let html = '';
     let count = 0;
     Object.entries(vendorsCache).forEach(([vKey, v]) => {
         if (v.menu) {
@@ -3059,7 +3064,6 @@ function loadPendingImages() {
             });
         }
     });
-    html += '</div>';
     if (count === 0) {
         html = `<div class="empty-state"><i data-lucide="image" style="width:48px;height:48px;display:block;margin:0 auto 12px;opacity:.4;"></i>No pending images to approve</div>`;
     }
