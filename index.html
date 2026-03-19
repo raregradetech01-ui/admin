@@ -194,7 +194,6 @@
         .toggle.active::after { transform: translateX(22px); }
         .settings-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px; font-family: inherit; font-size: .88rem; outline: none; cursor: pointer; background: var(--bg); color: var(--text); }
         .settings-select:focus { border-color: var(--accent); }
-        /* ── Delivery Fee Settings Input ── */
         .fee-input-wrap {
             display: flex;
             align-items: center;
@@ -239,7 +238,6 @@
             flex-shrink: 0;
             white-space: nowrap;
         }
-        /* ── Delivery Fee Calculator (inline in settings) ── */
         .fee-calculator {
             background: linear-gradient(135deg, #f0f8ff, #eef3ff);
             border: 1.5px solid #c8dfff;
@@ -289,7 +287,6 @@
         }
         .fee-calc-result .res-label { color: var(--dim); font-weight: 500; }
         .fee-calc-result .res-value { font-weight: 800; color: var(--accent); font-size: 1rem; }
-        /* ── Delivery Fee tier table ── */
         .fee-tier-table {
             width: 100%;
             border-collapse: collapse;
@@ -364,7 +361,6 @@
         .shim-nav { height: 36px; border-radius: 999px; width: 42px; }
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.1);} }
         @keyframes spin { from{transform:rotate(0deg);}to{transform:rotate(360deg);} }
-        /* ── MODERN LOCATION SEARCH AUTOCOMPLETE ── */
         .loc-search-wrap {
             background: linear-gradient(145deg, #f8fff9, #f0fdf4);
             border-radius: 16px;
@@ -612,7 +608,6 @@
             border-radius: 999px;
             flex-shrink: 0;
         }
-        /* ── Delivery Fee Dashboard Banner ── */
         .delivery-fee-banner {
             background: linear-gradient(135deg, #f0f8ff, #e8f0ff);
             border: 1.5px solid #c8dfff;
@@ -644,7 +639,6 @@
             flex-shrink: 0;
             letter-spacing: -.5px;
         }
-        /* ── PENDING IMAGE APPROVALS SECTION STYLES ── */
         .pending-image-card {
             background: white;
             border: 1px solid var(--border);
@@ -696,7 +690,59 @@
             gap: 14px;
             padding: 16px;
         }
-        /* IMAGE VIEWER MODAL STYLES (reuses existing modal classes) */
+        /* DEALS & PROMOTIONS STYLES */
+        #promosContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            padding: 16px;
+        }
+        .promo-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .promo-card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent);
+        }
+        .promo-card img {
+            width: 100%;
+            height: 105px;
+            object-fit: cover;
+            background: var(--bg);
+            cursor: pointer;
+        }
+        .promo-card-info {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .promo-card-meta {
+            flex: 1;
+            min-width: 0;
+        }
+        .promo-card-meta .promo-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .promo-card-meta .promo-sub {
+            font-size: 0.8rem;
+            color: var(--dim);
+        }
+        .promo-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+        /* IMAGE VIEWER MODAL */
         #imageViewerModal .modal-content {
             background: transparent;
             box-shadow: none;
@@ -759,11 +805,15 @@
                 <span class="nav-text">Drivers</span>
                 <span class="notification-badge" id="driverBadge"></span>
             </div>
-            <!-- NEW: Pending Images tab -->
             <div class="nav-item" onclick="showTab('pendingImages',this)">
                 <i data-lucide="image" class="nav-icon"></i>
                 <span class="nav-text">Pending Images</span>
                 <span class="notification-badge" id="pendingImagesBadge"></span>
+            </div>
+            <!-- NEW: Deals & Promotions -->
+            <div class="nav-item" onclick="showTab('deals',this)">
+                <i data-lucide="tag" class="nav-icon"></i>
+                <span class="nav-text">Deals &amp; Promotions</span>
             </div>
             <div class="nav-item" onclick="showTab('analytics',this)">
                 <i data-lucide="bar-chart-3" class="nav-icon"></i>
@@ -812,7 +862,7 @@
             <div class="dfb-sub">Fee is calculated per km between vendor and delivery address</div>
         </div>
         <div class="dfb-rate" id="dashFeeRateDisplay">R10/km</div>
-        <button class="btn btn-edit" style="flex-shrink:0;" onclick="showTab('settings',document.querySelectorAll('.nav-item')[6])">
+        <button class="btn btn-edit" style="flex-shrink:0;" onclick="showTab('settings',document.querySelectorAll('.nav-item')[7])">
             Manage Fees
         </button>
     </div>
@@ -874,7 +924,7 @@
             <div style="font-weight:600;font-size:.9rem;">Export PDF</div>
             <div style="font-size:.75rem;color:var(--dim);">Full report</div>
         </div>
-        <div class="quick-action-btn" onclick="showTab('history',document.querySelectorAll('.nav-item')[4])">
+        <div class="quick-action-btn" onclick="showTab('history',document.querySelectorAll('.nav-item')[5])">
             <i data-lucide="history" style="width:24px;height:24px;"></i>
             <div style="font-weight:600;font-size:.9rem;">View History</div>
             <div style="font-size:.75rem;color:var(--dim);">Full audit trail</div>
@@ -946,7 +996,7 @@
         </table>
     </div>
 </section>
-<!-- NEW: PENDING IMAGES SECTION -->
+<!-- PENDING IMAGES -->
 <section id="pendingImages" class="page-content">
     <div class="header">
         <h1>Pending Image Approvals</h1>
@@ -954,6 +1004,16 @@
     </div>
     <div class="content-card">
         <div id="pendingImagesContainer" style="padding:16px;"></div>
+    </div>
+</section>
+<!-- DEALS & PROMOTIONS -->
+<section id="deals" class="page-content">
+    <div class="header">
+        <h1>Deals &amp; Promotions</h1>
+        <button class="btn-primary" onclick="openAddPromoModal()">Add New Deal</button>
+    </div>
+    <div class="content-card">
+        <div id="promosContainer" style="padding:16px;"></div>
     </div>
 </section>
 <!-- ANALYTICS -->
@@ -1024,9 +1084,6 @@
         </button>
     </div>
     <div class="settings-grid">
-        <!-- ══════════════════════════════════
-             DELIVERY FEE SETTINGS CARD (NEW)
-             ══════════════════════════════════ -->
         <div class="settings-card" style="border: 2px solid #c8dfff; background: linear-gradient(135deg, #f8fcff, #f0f6ff);">
             <h3 style="margin-bottom:6px;display:flex;align-items:center;gap:8px;">
                 <i data-lucide="truck" style="width:18px;height:18px;color:var(--accent);"></i> Delivery Fees
@@ -1076,7 +1133,6 @@
                     <span class="fee-suffix">order</span>
                 </div>
             </div>
-            <!-- Fee preview table -->
             <div style="margin-top: 18px;">
                 <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
                     <i data-lucide="table-2" style="width:12px;height:12px;"></i> Fee Preview Table
@@ -1088,7 +1144,6 @@
                     <tbody id="feeTierBody"></tbody>
                 </table>
             </div>
-            <!-- Live calculator -->
             <div class="fee-calculator">
                 <h4>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="14"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
@@ -1118,7 +1173,6 @@
                 </button>
             </div>
         </div>
-        <!-- END DELIVERY FEE CARD -->
         <div class="settings-card">
             <h3 style="margin-bottom:14px;display:flex;align-items:center;gap:8px;"><i data-lucide="bell-ring" style="width:18px;height:18px;color:var(--accent);"></i> Notifications</h3>
             <div class="settings-item"><div><div style="font-weight:600;">Email Alerts</div><div style="font-size:.83rem;color:var(--dim);">Receive daily summary emails</div></div><div class="toggle active" id="tog-email" onclick="toggleSetting(this,'emailAlerts')"></div></div>
@@ -1159,8 +1213,8 @@
     </div>
 </section>
 </main>
-<!-- ═══════════════ MODALS ═══════════════ -->
-<!-- ADD VENDOR -->
+
+<!-- ADD VENDOR MODAL -->
 <div class="modal-overlay" id="addVendorModal">
     <div class="modal-content" style="width:620px;">
         <h3><i data-lucide="store" style="width:22px;height:22px;color:var(--accent);"></i> Register New Vendor</h3>
@@ -1294,7 +1348,8 @@
         </div>
     </div>
 </div>
-<!-- EDIT VENDOR -->
+
+<!-- EDIT VENDOR MODAL (full copy from original) -->
 <div class="modal-overlay" id="editVendorModal">
     <div class="modal-content" style="width:620px;">
         <h3><i data-lucide="edit-3" style="width:22px;height:22px;color:var(--accent);"></i> Update Vendor</h3>
@@ -1442,7 +1497,8 @@
         </div>
     </div>
 </div>
-<!-- ADD DRIVER -->
+
+<!-- ADD DRIVER MODAL (full) -->
 <div class="modal-overlay" id="addDriverModal">
     <div class="modal-content">
         <h3><i data-lucide="bike" style="width:22px;height:22px;color:var(--purple);"></i> Add New Driver</h3>
@@ -1482,7 +1538,8 @@
         </div>
     </div>
 </div>
-<!-- EDIT DRIVER -->
+
+<!-- EDIT DRIVER MODAL (full) -->
 <div class="modal-overlay" id="editDriverModal">
     <div class="modal-content">
         <h3><i data-lucide="edit-3" style="width:22px;height:22px;color:var(--purple);"></i> Update Driver</h3>
@@ -1521,7 +1578,8 @@
         </div>
     </div>
 </div>
-<!-- DRIVER DETAIL VIEW -->
+
+<!-- VIEW DRIVER MODAL (full) -->
 <div class="modal-overlay" id="viewDriverModal">
     <div class="modal-content" style="width:580px;">
         <h3><i data-lucide="id-card" style="width:22px;height:22px;color:var(--purple);"></i> Driver Profile</h3>
@@ -1531,7 +1589,8 @@
         </div>
     </div>
 </div>
-<!-- DELETE CONFIRM -->
+
+<!-- DELETE MODAL (full) -->
 <div class="modal-overlay" id="deleteModal">
     <div class="modal-content modal-sm">
         <div class="modal-danger-icon"><i data-lucide="trash-2" style="width:30px;height:30px;color:var(--danger);"></i></div>
@@ -1545,7 +1604,8 @@
         </div>
     </div>
 </div>
-<!-- DISABLE/ENABLE CONFIRM -->
+
+<!-- DISABLE MODAL (full) -->
 <div class="modal-overlay" id="disableModal">
     <div class="modal-content modal-sm">
         <div class="modal-warning-icon" id="dis-icon"><i data-lucide="alert-triangle" style="width:30px;height:30px;color:var(--warning);"></i></div>
@@ -1564,7 +1624,8 @@
         </div>
     </div>
 </div>
-<!-- ADMIN PROFILE -->
+
+<!-- PROFILE MODAL (full) -->
 <div class="modal-overlay" id="profileModal">
     <div class="modal-content">
         <h3><i data-lucide="user-cog" style="width:22px;height:22px;color:var(--accent);"></i> Admin Profile</h3>
@@ -1600,18 +1661,63 @@
         </div>
     </div>
 </div>
-<!-- IMAGE VIEWER MODAL (NEW) -->
+
+<!-- NEW PROMO MODAL -->
+<div class="modal-overlay" id="promoModal">
+    <div class="modal-content" style="width:520px;">
+        <h3><i data-lucide="tag" style="width:22px;height:22px;color:var(--accent);"></i> <span id="promoModalTitle">Add New Deal</span></h3>
+        <input type="hidden" id="promoKey">
+        <div class="form-group">
+            <label>Promo Title <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="promoTitle" placeholder="Free Delivery All Day">
+        </div>
+        <div class="form-group">
+            <label>Sub Text</label>
+            <input type="text" id="promoSub" placeholder="On orders over R150">
+        </div>
+        <div class="form-group">
+            <label>Badge Text</label>
+            <input type="text" id="promoBadge" placeholder="🚚 Free Delivery">
+        </div>
+        <div class="form-group">
+            <label>Color Theme</label>
+            <select id="promoColor">
+                <option value="promo-green">Green (Free Delivery)</option>
+                <option value="promo-orange">Orange (New User)</option>
+                <option value="promo-purple">Purple (Limited Time)</option>
+                <option value="promo-pink">Pink (Desserts)</option>
+                <option value="promo-teal">Teal (Bundles)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Promo Image</label>
+            <input type="file" id="promoImage" accept="image/*">
+            <div id="promoCurrentImg" style="display:none;margin-top:8px;">
+                <p style="font-size:.8rem;color:var(--dim);">Current image:</p>
+                <img id="promoImgPreview" style="max-width:180px;border-radius:12px;">
+            </div>
+        </div>
+        <div class="modal-btn-row">
+            <button class="btn btn-approve" style="flex:2;justify-content:center;" onclick="savePromo()"><i data-lucide="save" style="width:16px;height:16px;"></i> Save Deal</button>
+            <button class="btn btn-edit" style="flex:1;justify-content:center;" onclick="hideModal('promoModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- IMAGE VIEWER MODAL -->
 <div class="modal-overlay" id="imageViewerModal" onclick="hideImageViewer()">
     <div onclick="event.stopImmediatePropagation()" style="background:transparent;max-width:92vw;max-height:92vh;display:flex;align-items:center;justify-content:center;position:relative;">
         <img id="viewerImage" style="max-width:100%;max-height:88vh;border-radius:20px;box-shadow:var(--shadow-hover);cursor:zoom-out;" onclick="hideImageViewer()">
         <button onclick="hideImageViewer()" style="position:absolute;top:24px;right:24px;background:rgba(0,0,0,0.75);color:white;border:none;width:42px;height:42px;border-radius:50%;font-size:24px;line-height:1;cursor:pointer;z-index:10;">×</button>
     </div>
 </div>
+
 <!-- Toast -->
 <div class="toast" id="toast">
     <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
     <span id="toastMsg">Done</span>
 </div>
+
 <script>
 lucide.createIcons();
 const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2F0bGVnb3BoYXNoYSIsImEiOiJjbTlpOTdzbmYwMGNsMmpzYWJtZzN4d3pqIn0.Zt-aSMEoahrV3zkiVVHbOw';
@@ -1637,6 +1743,7 @@ async function uploadToCloudinary(file) {
 }
 let vendorsCache = {};
 let driversCache = {};
+let promosCache = {};
 let currentDriverFilter = 'all';
 const storeTypeLabels = {
     restaurant: '🍽️ Restaurant',
@@ -1646,9 +1753,6 @@ const storeTypeLabels = {
     pets: '🐾 Pets',
     electronics: '📱 Electronics',
 };
-// ══════════════════════════════════════════════════════════
-// DELIVERY FEE ENGINE
-// ══════════════════════════════════════════════════════════
 let deliveryFeeConfig = {
     ratePerKm: 10,
     minimumFee: 15,
@@ -1676,11 +1780,6 @@ function calcDeliveryFee(distanceKm, orderTotal = 0, cfg = deliveryFeeConfig) {
     if (minimumFee > 0 && raw < minimumFee) parts.push(`min fee applied: R${minimumFee}`);
     if (maximumFee > 0 && raw > maximumFee) parts.push(`capped at R${maximumFee}`);
     return { fee, isFree: false, breakdown: parts.join(' · ') };
-}
-function calcDeliveryFeeByCoords(vendorLat, vendorLng, deliveryLat, deliveryLng, orderTotal = 0) {
-    const distanceKm = haversineDistanceKm(vendorLat, vendorLng, deliveryLat, deliveryLng);
-    const result = calcDeliveryFee(distanceKm, orderTotal);
-    return { distanceKm, ...result };
 }
 function loadDeliveryFeeConfig() {
     const local = JSON.parse(localStorage.getItem('vynix_delivery_fees') || 'null');
@@ -1763,7 +1862,7 @@ function saveDeliveryFeeSettings() {
         Object.assign(deliveryFeeConfig, config);
         localStorage.setItem('vynix_delivery_fees', JSON.stringify(config));
         showToast(`Delivery fee saved: R${ratePerKm}/km`, 'success');
-        logHistory(`Updated delivery fee: R${ratePerKm}/km · min R${minimumFee} · max R${maximumFee > 0 ? 'R'+maximumFee : 'none'} · free threshold R${freeThreshold > 0 ? freeThreshold : 'off'}`, 'settings');
+        logHistory(`Updated delivery fee: R${ratePerKm}/km`, 'settings');
         updateDashboardFeeBanner();
         updateFeePreviewTable();
     }).catch(() => showToast('Error saving delivery fee settings', 'error'));
@@ -1772,9 +1871,6 @@ function updateDashboardFeeBanner() {
     const el = document.getElementById('dashFeeRateDisplay');
     if (el) el.textContent = `R${deliveryFeeConfig.ratePerKm}/km`;
 }
-// ══════════════════════════════════════════════════════════
-// MODERN LOCATION PICKER
-// ══════════════════════════════════════════════════════════
 class LocationPicker {
     constructor(containerId, latInputId, lngInputId, onSelect) {
         this.container = document.getElementById(containerId);
@@ -2018,12 +2114,10 @@ function initLocationPickers() {
 }
 document.addEventListener('DOMContentLoaded', initLocationPickers);
 setTimeout(initLocationPickers, 200);
-// ── Sidebar ─────────────────────────────────────────────────────────────
 const sidebar = document.getElementById('mainSidebar');
 const mainPanel = document.getElementById('mainPanel');
 sidebar.addEventListener('mouseenter', () => { sidebar.classList.add('expanded'); mainPanel.classList.add('shifted'); });
 sidebar.addEventListener('mouseleave', () => { sidebar.classList.remove('expanded'); mainPanel.classList.remove('shifted'); });
-// ── Tab navigation ─────────────────────────────────────────────────────
 function showTab(id, el) {
     document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2034,6 +2128,7 @@ function showTab(id, el) {
     if (id === 'history') renderHistory();
     if (id === 'settings') { updateFeePreviewTable(); recalcFee(); }
     if (id === 'pendingImages') loadPendingImages();
+    if (id === 'deals') renderPromos();
 }
 function genID(prefix) {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -2054,13 +2149,10 @@ function hideModal(id) {
 window.onclick = e => {
     if (e.target.classList.contains('modal-overlay'))
         ['addVendorModal','editVendorModal','addDriverModal','editDriverModal',
-         'viewDriverModal','deleteModal','disableModal','profileModal','imageViewerModal'].forEach(hideModal);
+         'viewDriverModal','deleteModal','disableModal','profileModal','promoModal','imageViewerModal'].forEach(hideModal);
 };
 function escS(s) { return String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 function fmtDate(ts) { return ts ? new Date(ts).toLocaleDateString('en-ZA') : 'N/A'; }
-// ════════════════════════════════════════
-// VENDORS
-// ════════════════════════════════════════
 function startVendorSync() {
     db.ref('vendors').on('value', snap => {
         vendorsCache = snap.val() || {};
@@ -2328,9 +2420,6 @@ function approveVendor(key, name) {
         addNotification(`Vendor "${name}" was approved`, 'store');
     });
 }
-// ════════════════════════════════════════
-// DRIVERS
-// ════════════════════════════════════════
 const _notifiedDriverApplications = new Set();
 function startDriverSync() {
     db.ref('drivers').on('value', snap => {
@@ -2596,9 +2685,6 @@ function approveDriver(key, name) {
         });
     });
 }
-// ════════════════════════════════════════
-// DELETE
-// ════════════════════════════════════════
 function openDeleteModal(key, name, type) {
     document.getElementById('del-key').value = key;
     document.getElementById('del-name').innerText = '"' + name + '"';
@@ -2615,9 +2701,6 @@ function confirmDelete() {
         hideModal('deleteModal');
     }).catch(() => showToast('Error deleting','error'));
 }
-// ════════════════════════════════════════
-// DISABLE/ENABLE
-// ════════════════════════════════════════
 function openDisableModal(key, name, type, action) {
     document.getElementById('dis-key').value = key;
     document.getElementById('dis-type').value = type;
@@ -2661,9 +2744,6 @@ function confirmDisable() {
         hideModal('disableModal');
     });
 }
-// ════════════════════════════════════════
-// DASHBOARD STATS
-// ════════════════════════════════════════
 function updateDashboardStats() {
     const vAll=Object.values(vendorsCache);
     document.getElementById('stat-total').innerText = vAll.length;
@@ -2683,9 +2763,6 @@ function updateDashboardStats() {
     document.getElementById('ana-drivers').innerText = dAct;
     document.getElementById('ana-revenue').innerText = 'R ' + ((vAct*4800)+(dAct*1200)).toLocaleString('en-ZA');
 }
-// ════════════════════════════════════════
-// ANALYTICS CHARTS
-// ════════════════════════════════════════
 function renderCharts() {
     renderMonthlyChart('vendorChart', vendorsCache, 'var(--accent)', '#5856d688');
     renderMonthlyChart('driverChart', driversCache, 'var(--purple)', '#af52de88');
@@ -2726,9 +2803,6 @@ function getLast7Months() {
     return months;
 }
 function updateChart(period) { renderCharts(); showToast(`Analytics updated for ${period}`,'success'); }
-// ════════════════════════════════════════
-// HISTORY
-// ════════════════════════════════════════
 function logHistory(msg, category='general') {
     db.ref('adminHistory').push({ msg, category, ts:Date.now(), date:new Date().toLocaleDateString('en-ZA'), time:new Date().toLocaleTimeString('en-ZA') });
 }
@@ -2774,9 +2848,6 @@ function clearHistory() {
     if (!confirm('Clear all history permanently? This cannot be undone.')) return;
     db.ref('adminHistory').remove().then(()=>{ showToast('History cleared','success'); renderHistory(); });
 }
-// ════════════════════════════════════════
-// NOTIFICATIONS
-// ════════════════════════════════════════
 function addNotification(msg, icon='bell') {
     db.ref('adminNotifications').push({ msg, icon, ts:Date.now(), read:false });
 }
@@ -2892,9 +2963,6 @@ function markAllRead(){
         db.ref('adminNotifications').update(updates).then(()=>showToast('All notifications marked read','success'));
     });
 }
-// ════════════════════════════════════════
-// FILTER TABLE
-// ════════════════════════════════════════
 function filterTable(tbodyId, inputId) {
     const val = document.getElementById(inputId).value.toLowerCase();
     document.querySelectorAll('#'+tbodyId+' tr').forEach(row => {
@@ -2902,9 +2970,6 @@ function filterTable(tbodyId, inputId) {
             row.style.display = row.dataset.search.includes(val) ? '' : 'none';
     });
 }
-// ════════════════════════════════════════
-// SETTINGS
-// ════════════════════════════════════════
 const settingsState={};
 function loadSettings(){
     const saved=JSON.parse(localStorage.getItem('vynix_settings')||'{}');
@@ -2922,9 +2987,6 @@ function saveAllSettings(){
     showToast('Settings saved successfully!','success');
     logHistory('System settings updated','settings');
 }
-// ════════════════════════════════════════
-// ADMIN PROFILE
-// ════════════════════════════════════════
 let selectedGradient='linear-gradient(135deg,#007aff,#5856d6)';
 function loadProfile(){
     const p=JSON.parse(localStorage.getItem('vynix_profile')||'{}');
@@ -2958,9 +3020,6 @@ function saveProfile(){
     logHistory('Admin profile updated','settings');
     hideModal('profileModal');
 }
-// ════════════════════════════════════════
-// EXPORT PDF
-// ════════════════════════════════════════
 async function exportPDF(){
     showToast('Generating PDF report…','info');
     const {jsPDF}=window.jspdf;
@@ -2984,7 +3043,6 @@ async function exportPDF(){
         doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text(c.l,x+cW/2,y+19,{align:'center'});
     });
     y+=32;
-    // Delivery Fee summary block in PDF
     doc.setTextColor(29,29,31);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('Delivery Fee Configuration',14,y);y+=6;
     doc.autoTable({startY:y,head:[['Setting','Value']],body:[
         ['Rate Per Kilometre',`R${deliveryFeeConfig.ratePerKm}/km`],
@@ -3033,9 +3091,6 @@ async function exportPDF(){
     showToast('PDF report downloaded!','success');
     logHistory('Exported full PDF report','settings');
 }
-// ════════════════════════════════════════
-// HELPERS
-// ════════════════════════════════════════
 function statusBadge(status){
     if(status==='active') return `<span class="badge badge-active"><i data-lucide="check-circle" style="width:11px;height:11px;"></i> ACTIVE</span>`;
     if(status==='pending') return `<span class="badge badge-pending"><i data-lucide="clock" style="width:11px;height:11px;"></i> PENDING</span>`;
@@ -3048,9 +3103,7 @@ function showToast(msg,type='success'){
     clearTimeout(t._timer);
     t._timer=setTimeout(()=>t.classList.remove('show'),3400);
 }
-// ════════════════════════════════════════
-// PENDING IMAGES APPROVAL LOGIC (UPDATED)
-// ════════════════════════════════════════
+// PENDING IMAGES
 function loadPendingImages() {
     const container = document.getElementById('pendingImagesContainer');
     let html = '';
@@ -3102,10 +3155,9 @@ window.declineImage = function(vKey, mKey) {
     db.ref(`vendors/${vKey}/menu/${mKey}`).update({
         imageApproved: false,
         imageDeclineReason: trimmedReason,
-        imageURL: null // optional: remove the image URL so vendor must re-upload
+        imageURL: null
     }).then(() => {
         showToast('Image declined. Reason sent to vendor.', 'success');
-        // Notify vendor (push to their notifications node)
         db.ref(`vendors/${vKey}/notifications`).push({
             type: 'image_declined',
             itemKey: mKey,
@@ -3117,10 +3169,108 @@ window.declineImage = function(vKey, mKey) {
         logHistory(`Declined image for vendor ${vKey} with reason: ${trimmedReason}`, 'delete');
     });
 };
-// NEW: IMAGE VIEWER FUNCTIONS
+// DEALS & PROMOTIONS
+function loadPromos() {
+    db.ref('promotions').on('value', snap => {
+        promosCache = snap.val() || {};
+        if (document.getElementById('deals').classList.contains('active')) renderPromos();
+    });
+}
+function renderPromos() {
+    const container = document.getElementById('promosContainer');
+    let html = '';
+    Object.entries(promosCache).forEach(([key, p]) => {
+        html += `
+        <div class="promo-card">
+            <img src="${p.img || 'https://via.placeholder.com/300x120?text=Promo'}" class="pending-image-preview" onclick="showImageViewer('${p.img || ''}')">
+            <div class="promo-card-info">
+                <div class="promo-card-meta">
+                    <div class="promo-title">${p.title || 'Untitled Deal'}</div>
+                    <div class="promo-sub">${p.sub || ''}</div>
+                    <div style="font-size:0.75rem;color:var(--dim);">${p.badge || ''}</div>
+                </div>
+                <div class="promo-card-actions">
+                    <button class="btn btn-edit" onclick="openEditPromoModal('${key}')">Edit</button>
+                    <button class="btn btn-delete" onclick="deletePromo('${key}')">Delete</button>
+                </div>
+            </div>
+        </div>`;
+    });
+    if (!html) html = `<div class="empty-state"><i data-lucide="tag" style="width:48px;height:48px;display:block;margin:0 auto 12px;opacity:.4;"></i>No deals yet.<br><button class="btn-primary" style="margin-top:12px;" onclick="openAddPromoModal()">Add First Deal</button></div>`;
+    container.innerHTML = html;
+    lucide.createIcons();
+}
+function openAddPromoModal() {
+    showModal('promoModal');
+    document.getElementById('promoModalTitle').textContent = 'Add New Deal';
+    document.getElementById('promoKey').value = '';
+    document.getElementById('promoTitle').value = '';
+    document.getElementById('promoSub').value = '';
+    document.getElementById('promoBadge').value = '';
+    document.getElementById('promoColor').value = 'promo-green';
+    document.getElementById('promoImage').value = '';
+    document.getElementById('promoCurrentImg').style.display = 'none';
+}
+function openEditPromoModal(key) {
+    const p = promosCache[key];
+    if (!p) return;
+    showModal('promoModal');
+    document.getElementById('promoModalTitle').textContent = 'Edit Deal';
+    document.getElementById('promoKey').value = key;
+    document.getElementById('promoTitle').value = p.title || '';
+    document.getElementById('promoSub').value = p.sub || '';
+    document.getElementById('promoBadge').value = p.badge || '';
+    document.getElementById('promoColor').value = p.colorClass || 'promo-green';
+    document.getElementById('promoImage').value = '';
+    const previewWrap = document.getElementById('promoCurrentImg');
+    if (p.img) {
+        document.getElementById('promoImgPreview').src = p.img;
+        previewWrap.style.display = 'block';
+    } else previewWrap.style.display = 'none';
+}
+async function savePromo() {
+    const key = document.getElementById('promoKey').value;
+    const title = document.getElementById('promoTitle').value.trim();
+    if (!title) { showToast('Title is required', 'error'); return; }
+    const file = document.getElementById('promoImage').files[0];
+    let imgURL = '';
+    if (file) {
+        showToast('Uploading image…', 'info');
+        try { imgURL = await uploadToCloudinary(file); } catch { showToast('Image upload failed', 'error'); return; }
+    }
+    const data = {
+        title,
+        sub: document.getElementById('promoSub').value.trim(),
+        badge: document.getElementById('promoBadge').value.trim(),
+        colorClass: document.getElementById('promoColor').value,
+        img: imgURL || (key && promosCache[key] ? promosCache[key].img : ''),
+        updatedAt: Date.now()
+    };
+    if (key) {
+        db.ref('promotions/' + key).update(data).then(() => {
+            showToast('Deal updated!', 'success');
+            hideModal('promoModal');
+            renderPromos();
+        });
+    } else {
+        db.ref('promotions').push(data).then(() => {
+            showToast('New deal added!', 'success');
+            hideModal('promoModal');
+            renderPromos();
+        });
+    }
+}
+function deletePromo(key) {
+    if (!confirm('Delete this deal permanently?')) return;
+    db.ref('promotions/' + key).remove().then(() => {
+        showToast('Deal deleted', 'success');
+        logHistory('Deleted promotion', 'delete');
+        renderPromos();
+    });
+}
 function showImageViewer(src) {
-    const imgEl = document.getElementById('viewerImage');
-    imgEl.src = src;
+    if (!src) return;
+    document.getElementById('viewerImage').src = src;
     const modal = document.getElementById('imageViewerModal');
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
@@ -3130,21 +3280,14 @@ function hideImageViewer() {
     modal.classList.remove('active');
     setTimeout(() => modal.style.display = 'none', 320);
 }
-// Refresh button
 window.refreshPendingImages = function() {
     loadPendingImages();
 };
-// ════════════════════════════════════════
-// SHIMMER LOADER
-// ════════════════════════════════════════
 (function(){
     const delay=2800+Math.random()*400;
     const overlay=document.getElementById('shimmerOverlay');
     setTimeout(()=>{overlay.classList.add('fade-out');setTimeout(()=>overlay.remove(),600);},delay);
 })();
-// ════════════════════════════════════════
-// BOOT
-// ════════════════════════════════════════
 startVendorSync();
 startDriverSync();
 startNotifSync();
@@ -3152,7 +3295,7 @@ startOrderSync();
 loadSettings();
 loadProfile();
 loadDeliveryFeeConfig();
-// Init fee table on load
+loadPromos();
 setTimeout(() => { updateFeePreviewTable(); }, 300);
 const styleTag=document.createElement('style');
 styleTag.innerHTML=`
