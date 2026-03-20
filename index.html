@@ -1213,7 +1213,6 @@
     </div>
 </section>
 </main>
-
 <!-- ADD VENDOR MODAL -->
 <div class="modal-overlay" id="addVendorModal">
     <div class="modal-content" style="width:620px;">
@@ -1348,7 +1347,6 @@
         </div>
     </div>
 </div>
-
 <!-- EDIT VENDOR MODAL (full copy from original) -->
 <div class="modal-overlay" id="editVendorModal">
     <div class="modal-content" style="width:620px;">
@@ -1497,7 +1495,6 @@
         </div>
     </div>
 </div>
-
 <!-- ADD DRIVER MODAL (full) -->
 <div class="modal-overlay" id="addDriverModal">
     <div class="modal-content">
@@ -1538,7 +1535,6 @@
         </div>
     </div>
 </div>
-
 <!-- EDIT DRIVER MODAL (full) -->
 <div class="modal-overlay" id="editDriverModal">
     <div class="modal-content">
@@ -1578,7 +1574,6 @@
         </div>
     </div>
 </div>
-
 <!-- VIEW DRIVER MODAL (full) -->
 <div class="modal-overlay" id="viewDriverModal">
     <div class="modal-content" style="width:580px;">
@@ -1589,7 +1584,6 @@
         </div>
     </div>
 </div>
-
 <!-- DELETE MODAL (full) -->
 <div class="modal-overlay" id="deleteModal">
     <div class="modal-content modal-sm">
@@ -1604,7 +1598,6 @@
         </div>
     </div>
 </div>
-
 <!-- DISABLE MODAL (full) -->
 <div class="modal-overlay" id="disableModal">
     <div class="modal-content modal-sm">
@@ -1624,7 +1617,6 @@
         </div>
     </div>
 </div>
-
 <!-- PROFILE MODAL (full) -->
 <div class="modal-overlay" id="profileModal">
     <div class="modal-content">
@@ -1661,7 +1653,6 @@
         </div>
     </div>
 </div>
-
 <!-- NEW PROMO MODAL -->
 <div class="modal-overlay" id="promoModal">
     <div class="modal-content" style="width:520px;">
@@ -1703,7 +1694,6 @@
         </div>
     </div>
 </div>
-
 <!-- IMAGE VIEWER MODAL -->
 <div class="modal-overlay" id="imageViewerModal" onclick="hideImageViewer()">
     <div onclick="event.stopImmediatePropagation()" style="background:transparent;max-width:92vw;max-height:92vh;display:flex;align-items:center;justify-content:center;position:relative;">
@@ -1711,13 +1701,39 @@
         <button onclick="hideImageViewer()" style="position:absolute;top:24px;right:24px;background:rgba(0,0,0,0.75);color:white;border:none;width:42px;height:42px;border-radius:50%;font-size:24px;line-height:1;cursor:pointer;z-index:10;">×</button>
     </div>
 </div>
-
+<!-- SUCCESS APPROVAL MODAL -->
+<div class="modal-overlay" id="successApprovalModal">
+    <div class="modal-content modal-sm">
+        <div class="modal-danger-icon" style="background: linear-gradient(135deg, #e6f9ed, #d1fae5); border: 2px solid var(--success);">
+            <i data-lucide="check-circle" style="width: 30px; height: 30px; color: var(--success);"></i>
+        </div>
+        <h3>Image Approved Successfully!</h3>
+        <p>The picture is now live and visible to all customers.</p>
+        <div class="modal-btn-row">
+            <button class="btn btn-approve" style="flex:1;justify-content:center;" onclick="hideModal('successApprovalModal')">Continue</button>
+        </div>
+    </div>
+</div>
+<!-- DECLINE IMAGE MODAL -->
+<div class="modal-overlay" id="declineImageModal">
+    <div class="modal-content modal-sm">
+        <div class="modal-warning-icon"><i data-lucide="x-circle" style="width:30px;height:30px;color:var(--danger);"></i></div>
+        <h3>Decline Image</h3>
+        <p>Enter the reason for declining (sent to vendor)</p>
+        <div class="form-group">
+            <textarea id="declineReason" placeholder="e.g. Image is blurry or incorrect..." style="min-height:80px;width:100%;"></textarea>
+        </div>
+        <div class="modal-btn-row">
+            <button class="btn btn-delete" onclick="confirmDeclineImage()">Decline</button>
+            <button class="btn btn-edit" onclick="hideModal('declineImageModal')">Cancel</button>
+        </div>
+    </div>
+</div>
 <!-- Toast -->
 <div class="toast" id="toast">
     <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
     <span id="toastMsg">Done</span>
 </div>
-
 <script>
 lucide.createIcons();
 const MAPBOX_TOKEN = 'pk.eyJ1Ijoia2F0bGVnb3BoYXNoYSIsImEiOiJjbTlpOTdzbmYwMGNsMmpzYWJtZzN4d3pqIn0.Zt-aSMEoahrV3zkiVVHbOw';
@@ -1745,6 +1761,8 @@ let vendorsCache = {};
 let driversCache = {};
 let promosCache = {};
 let currentDriverFilter = 'all';
+let currentDeclineVKey = '';
+let currentDeclineMKey = '';
 const storeTypeLabels = {
     restaurant: '🍽️ Restaurant',
     grocery: '🛒 Grocery',
@@ -2149,7 +2167,7 @@ function hideModal(id) {
 window.onclick = e => {
     if (e.target.classList.contains('modal-overlay'))
         ['addVendorModal','editVendorModal','addDriverModal','editDriverModal',
-         'viewDriverModal','deleteModal','disableModal','profileModal','promoModal','imageViewerModal'].forEach(hideModal);
+         'viewDriverModal','deleteModal','disableModal','profileModal','promoModal','imageViewerModal','successApprovalModal','declineImageModal'].forEach(hideModal);
 };
 function escS(s) { return String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 function fmtDate(ts) { return ts ? new Date(ts).toLocaleDateString('en-ZA') : 'N/A'; }
@@ -3146,17 +3164,30 @@ window.approveImage = function(vKey, mKey) {
         showToast('Image approved and now visible to customers!', 'success');
         loadPendingImages();
         logHistory('Approved menu item image', 'approve');
+        showModal('successApprovalModal');
     });
 };
 window.declineImage = function(vKey, mKey) {
-    const reason = prompt('Enter reason for declining this image (this will be sent to the vendor):');
-    if (!reason || !reason.trim()) return;
+    currentDeclineVKey = vKey;
+    currentDeclineMKey = mKey;
+    document.getElementById('declineReason').value = '';
+    showModal('declineImageModal');
+};
+window.confirmDeclineImage = function() {
+    const reason = document.getElementById('declineReason').value.trim();
+    if (!reason) {
+        showToast('Please enter a decline reason', 'error');
+        return;
+    }
     const trimmedReason = reason.trim();
+    const vKey = currentDeclineVKey;
+    const mKey = currentDeclineMKey;
     db.ref(`vendors/${vKey}/menu/${mKey}`).update({
         imageApproved: false,
         imageDeclineReason: trimmedReason,
         imageURL: null
     }).then(() => {
+        hideModal('declineImageModal');
         showToast('Image declined. Reason sent to vendor.', 'success');
         db.ref(`vendors/${vKey}/notifications`).push({
             type: 'image_declined',
