@@ -750,6 +750,17 @@
             width: auto;
             max-width: 92vw;
         }
+        /* validation warning style */
+        .field-warning {
+            border-color: var(--danger) !important;
+            background: #fff5f0 !important;
+        }
+        .warning-text {
+            font-size: 0.7rem;
+            color: var(--danger);
+            margin-top: 4px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -810,7 +821,6 @@
                 <span class="nav-text">Pending Images</span>
                 <span class="notification-badge" id="pendingImagesBadge"></span>
             </div>
-            <!-- NEW: Deals & Promotions -->
             <div class="nav-item" onclick="showTab('deals',this)">
                 <i data-lucide="tag" class="nav-icon"></i>
                 <span class="nav-text">Deals &amp; Promotions</span>
@@ -854,7 +864,6 @@
             <i data-lucide="plus" style="width:18px;height:18px;"></i> Add Vendor
         </button>
     </div>
-    <!-- Delivery Fee Banner -->
     <div class="delivery-fee-banner" id="dashDeliveryFeeBanner">
         <div class="dfb-icon"><i data-lucide="truck" style="width:20px;height:20px;color:white;"></i></div>
         <div class="dfb-info">
@@ -866,7 +875,6 @@
             Manage Fees
         </button>
     </div>
-    <!-- Driver pending alert banner -->
     <div class="driver-alert-banner" id="dashDriverAlert">
         <div class="alert-icon"><i data-lucide="user-check" style="width:20px;height:20px;color:white;"></i></div>
         <div class="alert-text">
@@ -943,18 +951,18 @@
         </div>
     </div>
     <div class="content-card">
-        <table>
+         <table>
             <thead>
-                <tr>
+                 <tr>
                     <th>Vendor</th><th>Store Type</th><th>Cuisine / Category</th><th>Status</th><th>Joined</th><th>Actions</th>
-                </tr>
+                 </tr>
             </thead>
             <tbody id="vendorTableBody">
                 <tr><td colspan="6" class="empty-state">
                     <i data-lucide="loader-2" style="width:44px;height:44px;display:block;margin:0 auto 12px;animation:spin 1s linear infinite;"></i>Loading vendors…
                 </td></tr>
             </tbody>
-        </table>
+         </table>
     </div>
 </section>
 <!-- DRIVERS -->
@@ -1842,11 +1850,7 @@ function updateFeePreviewTable() {
         const feeStr = isFree ? 'FREE' : `R${fee.toFixed(2)}`;
         const rawStr = `R${raw}`;
         const differs = !isFree && parseFloat(raw) !== fee;
-        return `<tr>
-            <td>${d} km</td>
-            <td style="color:var(--dim);">${rawStr}</td>
-            <td style="font-weight:700;color:${isFree ? 'var(--success)' : (differs ? 'var(--warning)' : 'var(--text)')}">${feeStr}${differs ? ' *' : ''}</td>
-        </tr>`;
+        return `<tr><td>${d} km</td><td style="color:var(--dim);">${rawStr}</td><td style="font-weight:700;color:${isFree ? 'var(--success)' : (differs ? 'var(--warning)' : 'var(--text)')}">${feeStr}${differs ? ' *' : ''}</td></tr>`;
     }).join('');
 }
 function recalcFee() {
@@ -2197,21 +2201,12 @@ function renderVendorTable() {
             ? `<button class="btn btn-disable" onclick="openDisableModal('${key}','${escS(v.name)}','vendor','disable')"><i data-lucide="eye-off" style="width:13px;height:13px;"></i></button>`
             : `<button class="btn btn-enable" onclick="openDisableModal('${key}','${escS(v.name)}','vendor','enable')"><i data-lucide="eye" style="width:13px;height:13px;"></i></button>`;
         return `<tr data-search="${v.name.toLowerCase()} ${(v.vendorID||'').toLowerCase()} ${(v.storeType||'').toLowerCase()}">
-            <td><div class="person-info">
-                <img src="${avatar}" class="person-avatar" alt="">
-                <div><div style="font-weight:700;">${v.name}</div>
-                <div style="font-size:.78rem;color:var(--dim);font-family:monospace;">#${v.vendorID||'—'}</div></div>
-            </div></td>
+            <td><div class="person-info"><img src="${avatar}" class="person-avatar" alt=""><div><div style="font-weight:700;">${v.name}</div><div style="font-size:.78rem;color:var(--dim);font-family:monospace;">#${v.vendorID||'—'}</div></div></div></td>
             <td><span style="font-size:.82rem;font-weight:600;">${storeTypeLabel}</span></td>
             <td>${v.cuisine||'—'}</td>
             <td>${badge}</td>
             <td style="color:var(--dim);font-size:.88rem;">${fmtDate(v.createdAt)}</td>
-            <td><div class="btn-group">
-                ${approveBtn}
-                <button class="btn btn-edit" onclick="openEditVendorModal('${key}')"><i data-lucide="edit-2" style="width:13px;height:13px;"></i></button>
-                ${disBtn}
-                <button class="btn btn-delete" onclick="openDeleteModal('${key}','${escS(v.name)}','vendor')"><i data-lucide="trash-2" style="width:13px;height:13px;"></i></button>
-            </div></td>
+            <td><div class="btn-group">${approveBtn}<button class="btn btn-edit" onclick="openEditVendorModal('${key}')"><i data-lucide="edit-2" style="width:13px;height:13px;"></i></button>${disBtn}<button class="btn btn-delete" onclick="openDeleteModal('${key}','${escS(v.name)}','vendor')"><i data-lucide="trash-2" style="width:13px;height:13px;"></i></button></div></td>
         </tr>`;
     }).join('');
     lucide.createIcons();
@@ -2518,26 +2513,13 @@ function renderDriverTable() {
             ? `<span style="font-size:.73rem;color:var(--success);font-weight:600;display:flex;align-items:center;gap:3px;margin-top:3px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Login enabled</span>`
             : `<span style="font-size:.73rem;color:var(--danger);font-weight:600;display:flex;align-items:center;gap:3px;margin-top:3px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="11" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Login blocked</span>`;
         return `<tr data-search="${fullName.toLowerCase()} ${(d.driverID||'').toLowerCase()} ${(d.vehicleType||'').toLowerCase()}">
-            <td><div class="person-info">
-                <img src="${avatar}" class="person-avatar" alt="">
-                <div>
-                    <div style="font-weight:700;">${fullName}</div>
-                    <div style="font-size:.76rem;color:var(--dim);font-family:monospace;">#${d.driverID||'—'}</div>
-                    ${loginStatus}
-                </div>
-            </div></td>
+            <td><div class="person-info"><img src="${avatar}" class="person-avatar" alt=""><div><div style="font-weight:700;">${fullName}</div><div style="font-size:.76rem;color:var(--dim);font-family:monospace;">#${d.driverID||'—'}</div>${loginStatus}</div></div></td>
             <td><div style="font-weight:600;">${d.vehicleType||'—'}</div><div style="font-size:.78rem;color:var(--dim);">${d.vehicleDesc||''}</div></td>
             <td style="font-family:monospace;font-size:.85rem;">${d.licenseNumber||'—'}</td>
             <td style="font-size:.88rem;">${d.phone||'—'}</td>
             <td>${badge}</td>
             <td style="color:var(--dim);font-size:.88rem;">${fmtDate(d.createdAt)}</td>
-            <td><div class="btn-group">
-                ${approveBtn}
-                <button class="btn btn-edit" style="background:#f0eeff;color:var(--purple);" onclick="openViewDriverModal('${key}')"><i data-lucide="eye" style="width:13px;height:13px;"></i></button>
-                <button class="btn btn-edit" onclick="openEditDriverModal('${key}')"><i data-lucide="edit-2" style="width:13px;height:13px;"></i></button>
-                ${disBtn}
-                <button class="btn btn-delete" onclick="openDeleteModal('${key}','${escS(fullName)}','driver')"><i data-lucide="trash-2" style="width:13px;height:13px;"></i></button>
-            </div></td>
+            <td><div class="btn-group">${approveBtn}<button class="btn btn-edit" style="background:#f0eeff;color:var(--purple);" onclick="openViewDriverModal('${key}')"><i data-lucide="eye" style="width:13px;height:13px;"></i></button><button class="btn btn-edit" onclick="openEditDriverModal('${key}')"><i data-lucide="edit-2" style="width:13px;height:13px;"></i></button>${disBtn}<button class="btn btn-delete" onclick="openDeleteModal('${key}','${escS(fullName)}','driver')"><i data-lucide="trash-2" style="width:13px;height:13px;"></i></button></div></td>
         </tr>`;
     }).join('');
     lucide.createIcons();
@@ -2567,6 +2549,11 @@ async function saveNewDriver() {
     const status = document.getElementById('ad-status').value;
     const file = document.getElementById('ad-image').files[0];
     if (!fname||!lname||!phone||!vehicle) { showToast('Fill in first name, last name, phone & vehicle','error'); return; }
+    // Enforce license & vehicle registration for active drivers
+    if (status === 'active' && (!license || !vehicleDesc)) {
+        showToast('Driver license number AND vehicle registration are required to activate a driver immediately.', 'error');
+        return;
+    }
     let imageURL = '';
     if (file) { showToast('Uploading photo…','info'); try { imageURL = await uploadToCloudinary(file); } catch { showToast('Upload failed','error'); return; } }
     const data = {
@@ -2608,16 +2595,25 @@ async function saveDriverChanges() {
     const key = document.getElementById('ed-key').value;
     const fname = document.getElementById('ed-fname').value.trim();
     const lname = document.getElementById('ed-lname').value.trim();
+    const license = document.getElementById('ed-license').value.trim();
+    const vehicleDesc = document.getElementById('ed-vehicledesc').value.trim();
     const file = document.getElementById('ed-image').files[0];
     if (!fname||!lname) { showToast('Name is required','error'); return; }
+    // If driver is being edited and becomes active, require both fields
+    const existing = driversCache[key];
+    const newStatus = existing.status; // status not editable in edit modal by default? Actually status is not in edit modal. We'll keep simple: if driver is already active, enforce; otherwise if becoming active later (approval), handled in approveDriver.
+    if (existing.status === 'active' && (!license || !vehicleDesc)) {
+        showToast('Active drivers must have both license number and vehicle registration. Please fill them before saving.', 'error');
+        return;
+    }
     let upd = {
         firstName: fname, lastName: lname,
         phone: document.getElementById('ed-phone').value.trim(),
         email: document.getElementById('ed-email').value.trim(),
         vehicleType: document.getElementById('ed-vehicle').value,
-        vehicleDesc: document.getElementById('ed-vehicledesc').value.trim(),
+        vehicleDesc: vehicleDesc,
         idNumber: document.getElementById('ed-idnumber').value.trim(),
-        licenseNumber: document.getElementById('ed-license').value.trim(),
+        licenseNumber: license,
         adminNotes: document.getElementById('ed-notes').value.trim(),
     };
     if (file) { showToast('Uploading…','info'); try { upd.imageURL = await uploadToCloudinary(file); } catch { showToast('Upload failed','error'); return; } }
@@ -2665,9 +2661,9 @@ function openViewDriverModal(key) {
             <div class="detail-item"><div class="di-label">Phone</div><div class="di-value">${d.phone||'—'}</div></div>
             <div class="detail-item"><div class="di-label">Email</div><div class="di-value" style="word-break:break-all;">${d.email||'—'}</div></div>
             <div class="detail-item"><div class="di-label">Vehicle Type</div><div class="di-value">${d.vehicleType||'—'}</div></div>
-            <div class="detail-item"><div class="di-label">Vehicle / Reg</div><div class="di-value">${d.vehicleDesc||'—'}</div></div>
+            <div class="detail-item"><div class="di-label">Vehicle Reg / Description</div><div class="di-value">${d.vehicleDesc||'—'}</div></div>
             <div class="detail-item"><div class="di-label">ID / Passport</div><div class="di-value" style="font-family:monospace;">${d.idNumber||'—'}</div></div>
-            <div class="detail-item"><div class="di-label">Driver's License</div><div class="di-value" style="font-family:monospace;">${d.licenseNumber||'—'}</div></div>
+            <div class="detail-item"><div class="di-label">Driver's License No.</div><div class="di-value" style="font-family:monospace;">${d.licenseNumber||'—'}</div></div>
             <div class="detail-item"><div class="di-label">Registered</div><div class="di-value">${fmtDate(d.createdAt)}</div></div>
             <div class="detail-item"><div class="di-label">Approved</div><div class="di-value">${d.approvedAt ? fmtDate(d.approvedAt) : '—'}</div></div>
         </div>
@@ -2684,6 +2680,13 @@ function openViewDriverModal(key) {
     setTimeout(() => lucide.createIcons(), 60);
 }
 function approveDriver(key, name) {
+    const driver = driversCache[key];
+    if (!driver) return;
+    // Ensure driver has both license number and vehicle registration before approval
+    if (!driver.licenseNumber || !driver.vehicleDesc) {
+        showToast('Cannot approve driver: missing license number or vehicle registration. Please edit driver details first.', 'error');
+        return;
+    }
     const id = genID('DRV-');
     db.ref('drivers/'+key).update({
         status:'active',
